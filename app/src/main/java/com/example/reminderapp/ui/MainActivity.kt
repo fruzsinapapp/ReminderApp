@@ -1,4 +1,4 @@
-package com.example.reminderapp
+package com.example.reminderapp.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
