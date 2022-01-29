@@ -34,6 +34,8 @@ fun Profile(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
+                .,
+
         ){
             TopAppBar {
                 IconButton(

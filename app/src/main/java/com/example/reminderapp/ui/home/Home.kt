@@ -78,7 +78,7 @@ fun HomeContent(
             .systemBarsPadding()
             .fillMaxWidth()
     ){
-        val appBarColor = MaterialTheme.colors.surface.copy(alpha = 0.80f)
+        val appBarColor = MaterialTheme.colors.secondary.copy(alpha = 0.80f)
 
         HomeAppBar(
             backgroundColor = appBarColor,
