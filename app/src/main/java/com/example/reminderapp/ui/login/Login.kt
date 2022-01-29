@@ -1,18 +1,72 @@
 package com.example.reminderapp.ui.login
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.accompanist.insets.systemBarsPadding
 
 @Composable
 fun Login(
     //navController: NavController
 ){
-    Surface(modifier = Modifier.fillMaxSize()) {
-        
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.LightGray) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+                .systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ){
+            Icon(
+                imageVector = Icons.Default.AccountBox,
+                contentDescription = null,
+                modifier = Modifier.size(200.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = "",
+                onValueChange = { /*TODO*/},
+                label = { Text("Username")},
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                )
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                value = "",
+                onValueChange = { /*TODO*/},
+                label = { Text("Password")},
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                ),
+                visualTransformation = PasswordVisualTransformation()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                onClick = {/*TODO*/},
+                enabled = true,
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.small
+
+
+            ){
+                Text(text = "Login")
+            }
+        }
     }
 }
 
