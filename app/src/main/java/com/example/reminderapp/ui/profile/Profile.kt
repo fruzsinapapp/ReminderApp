@@ -47,6 +47,7 @@ fun Profile(
                 }
                 Text(text = "Main page")
             }
+            Text(text = "Profile")
         }
     }
 }

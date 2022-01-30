@@ -1,5 +1,7 @@
 package com.example.reminderapp.ui.login
 
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,16 +19,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.reminderapp.data.entity.User
 import com.example.reminderapp.ui.MainActivity
 import com.google.accompanist.insets.systemBarsPadding
 
 @Composable
 fun Login(
-    navController: NavController
+    navController: NavController,
+    sharedPreferences: SharedPreferences
 ){
+
     Surface(modifier = Modifier.fillMaxSize(), color = Color.LightGray) {
         val username= rememberSaveable{mutableStateOf("")}
         val password= rememberSaveable{mutableStateOf("")}
+        //val sharedPreferences :SharedPreferences
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -44,7 +51,7 @@ fun Login(
             OutlinedTextField(
                 value = username.value,
                 placeholder ={"xyz"},
-                onValueChange = { data -> username.value = data},
+                onValueChange = {username.value = it},
                 label = { Text("Username")},
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -54,7 +61,7 @@ fun Login(
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
                 value = password.value,
-                onValueChange = { data -> password.value = data},
+                onValueChange = {password.value = it},
                 label = { Text("Password")},
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(
@@ -65,13 +72,14 @@ fun Login(
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
-                    navController.navigate("home")
+                    //navController.navigate("home")
 
-                    /*if(username.value != "" && password.value != ""){
+
+                    if(username.value == sharedPreferences.getString("username","") && password.value == sharedPreferences.getString("password","")){
                         navController.navigate("home")
-                    } else {
+                    } /*else {
                         Toast.makeText(
-                            MainActivity(),
+                            Login.this,
                             "Please enter a username and a password",
                             Toast.LENGTH_SHORT
                         ).show()

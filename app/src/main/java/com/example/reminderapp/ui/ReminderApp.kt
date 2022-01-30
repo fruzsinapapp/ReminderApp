@@ -1,5 +1,7 @@
 package com.example.reminderapp.ui
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,14 +15,18 @@ import com.example.reminderapp.ui.reminder.Reminder
 
 @Composable
 fun ReminderApp(
+    sharedPreferences: SharedPreferences,
     appState: ReminderAppState = rememberReminderAppState()
+
 ){
     NavHost(
+
         navController = appState.navController,
         startDestination = "login"
     ){
         composable(route="login") {
-            Login(navController = appState.navController) //to log in we need a button, and this button will use a navcontroller
+
+            Login(navController = appState.navController,sharedPreferences) //to log in we need a button, and this button will use a navcontroller
             //Login()
         }
         composable(route="home"){
