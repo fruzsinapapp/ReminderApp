@@ -70,5 +70,64 @@ private fun ReminderListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ){
+    ConstraintLayout(modifier = modifier.clickable { onClick() }) {
+        val (divider, reminderTitle, reminderDate) = createRefs()
+        Divider(
+            Modifier.constrainAs(divider){
+                top.linkTo(parent.top)
+                centerHorizontallyTo(parent)
+                width = Dimension.fillToConstraints
+            }
+        )
 
+        //title
+
+        Text(
+            text = reminder.reminderTitle,
+            maxLines = 1,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.constrainAs(reminderTitle) {
+                linkTo(
+                    start = parent.start,
+                    end = parent.end,
+                    startMargin = 24.dp,
+                    endMargin = 16.dp,
+                    bias = 0f
+                )
+                top.linkTo(parent.top, margin = 10.dp)
+                width = Dimension.preferredWrapContent
+            }
+        )
+
+        // date
+        Text(
+            text = when {
+                reminder.reminderDate != null -> {
+                    reminder.reminderDate.formatToString()
+                }
+                else -> Date().formatToString()
+            },
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.constrainAs(reminderDate) {
+                linkTo(
+                    start = reminderTitle.end,
+                    end = reminderTitle.start,
+                    startMargin = 8.dp,
+                    endMargin = 16.dp,
+                    bias = 0f // float this towards the start. this was is the fix we needed
+                )
+                centerVerticallyTo(reminderTitle)
+                top.linkTo(reminderTitle.bottom, 6.dp)
+                bottom.linkTo(parent.bottom, 10.dp)
+            }
+        )
+
+
+    }
+}
+
+private fun Date.formatToString(): String {
+    return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(this)
 }

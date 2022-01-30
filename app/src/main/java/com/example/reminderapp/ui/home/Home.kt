@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,11 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.reminderapp.R
+import com.example.reminderapp.ui.home.reminderMessages.ReminderMessages
 import com.google.accompanist.insets.systemBarsPadding
 
 @Composable
 fun Home(
-
     navController: NavController
 
 ) {
@@ -41,7 +42,7 @@ fun HomeContent(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navController.navigate(route = "reminder") },
-                contentColor = Color.Red,
+                contentColor = Color.Black,
                 modifier = Modifier.padding(all=20.dp)
             ) {
                 Icon(
@@ -51,7 +52,23 @@ fun HomeContent(
             }
         }
             ){
+        Column(
+            modifier = Modifier
+                .systemBarsPadding()
+                .fillMaxWidth()
+        ){
+            val appBarColor = MaterialTheme.colors.secondary.copy(alpha = 0.80f)
+
+            HomeAppBar(
+                backgroundColor = appBarColor,
+                navController = navController)
+
+            ReminderMessages(
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
+    /*
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -63,6 +80,7 @@ fun HomeContent(
 
         Spacer(modifier = Modifier.height(10.dp))
 
+
         Button(
             onClick = {navController.navigate("profile")},
             enabled = true,
@@ -71,19 +89,11 @@ fun HomeContent(
         ){
             Text(text = "Log out")
         }
-    }
 
-    Column(
-        modifier = Modifier
-            .systemBarsPadding()
-            .fillMaxWidth()
-    ){
-        val appBarColor = MaterialTheme.colors.secondary.copy(alpha = 0.80f)
-
-        HomeAppBar(
-            backgroundColor = appBarColor,
-            navController = navController)
     }
+    */
+
+
 }
 
 @Composable
@@ -103,8 +113,8 @@ private  fun HomeAppBar(
         },
         backgroundColor = backgroundColor,
         actions = {
-            IconButton( onClick = {} ) {
-                Icon(imageVector = Icons.Filled.Search, contentDescription = stringResource(R.string.search))
+            IconButton( onClick = {navController.navigate("login") } ) {
+                Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = stringResource(R.string.search))
             }
             IconButton( onClick = {navController.navigate("profile") } ) {
                 Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = stringResource(R.string.account))
