@@ -2,7 +2,10 @@ package com.example.reminderapp.ui.login
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -14,14 +17,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.User
 import com.example.reminderapp.ui.MainActivity
 import com.google.accompanist.insets.systemBarsPadding
+
 
 @Composable
 fun Login(
@@ -29,7 +35,7 @@ fun Login(
     sharedPreferences: SharedPreferences
 ){
 
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.LightGray) {
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.LightGray, ) {
         val username= rememberSaveable{mutableStateOf("")}
         val password= rememberSaveable{mutableStateOf("")}
         //val sharedPreferences :SharedPreferences

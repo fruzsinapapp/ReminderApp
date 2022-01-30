@@ -34,6 +34,7 @@ fun Reminder(
                 }
                 Text(text = "Main page")
             }
+            Text(text="Create a new reminder")
         }
     }
 }

@@ -81,7 +81,6 @@ private fun ReminderListItem(
         )
 
         //title
-
         Text(
             text = reminder.reminderTitle,
             maxLines = 1,
