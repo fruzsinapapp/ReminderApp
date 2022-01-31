@@ -1,5 +1,6 @@
 package com.example.reminderapp.ui.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,14 +23,17 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
 
 @Composable
 fun Profile(
     onBackPress: () -> Unit
 ) {
-    Surface {
+    Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -47,6 +51,13 @@ fun Profile(
                 }
                 Text(text = "Main page")
             }
+
+            Image(
+                modifier = Modifier,
+                painter = painterResource(R.drawable.background1),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds
+            )
             Text(text = "Profile")
         }
     }

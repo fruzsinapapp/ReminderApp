@@ -18,13 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.reminderapp.R
+import com.example.reminderapp.ReminderAppState
 import com.example.reminderapp.data.entity.User
+import com.example.reminderapp.rememberReminderAppState
 import com.example.reminderapp.ui.MainActivity
 import com.google.accompanist.insets.systemBarsPadding
 
@@ -39,6 +43,14 @@ fun Login(
         val username= rememberSaveable{mutableStateOf("")}
         val password= rememberSaveable{mutableStateOf("")}
         //val sharedPreferences :SharedPreferences
+
+        Image(
+            modifier = Modifier,
+            painter = painterResource(R.drawable.background1),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds
+        )
+
 
         Column(
             modifier = Modifier
@@ -80,15 +92,15 @@ fun Login(
                 onClick = {
                     //navController.navigate("home")
 
-
                     if(username.value == sharedPreferences.getString("username","") && password.value == sharedPreferences.getString("password","")){
                         navController.navigate("home")
                     } /*else {
                         Toast.makeText(
-                            Login.this,
+                            MainActivity(),
                             "Please enter a username and a password",
                             Toast.LENGTH_SHORT
                         ).show()
+
                     }*/
 
                 } ,
