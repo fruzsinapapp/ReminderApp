@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -13,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.reminderapp.ui.theme.ReminderAppTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val sharedpref: SharedPreferences
         val editor: SharedPreferences.Editor
@@ -22,6 +24,7 @@ class MainActivity : ComponentActivity() {
         editor = sharedpref.edit()
         editor.putString("username", "Test1")
         editor.putString("password", "password")
+        editor.putString("code", "00000")
         editor.commit()
 
         super.onCreate(savedInstanceState)

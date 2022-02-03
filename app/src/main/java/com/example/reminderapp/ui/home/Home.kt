@@ -29,7 +29,6 @@ fun Home(
         HomeContent(
             navController = navController
         )
-
     }
 }
 
@@ -113,7 +112,7 @@ private  fun HomeAppBar(
         },
         backgroundColor = backgroundColor,
         actions = {
-            IconButton( onClick = {navController.navigate("login") } ) {
+            IconButton( onClick = {navController.navigate("authentication") } ) {
                 Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = stringResource(R.string.search))
             }
             IconButton( onClick = {navController.navigate("profile") } ) {
