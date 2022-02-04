@@ -21,6 +21,8 @@ import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotMutableState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.reminderapp.R
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 const val pinSize = 5
@@ -50,30 +53,30 @@ fun Passcode(
     val showSuccess = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    if (inputPin.size == 5) {
-        LaunchedEffect(true) {
-            //delay(300)
-
-
-            if (inputPin.joinToString("") == sharedPreferences.getString("code","")) {
-                showSuccess.value = true
-                error.value = ""
-                /*
-            if (inputPin.joinToString("") == password) {
-                showSuccess.value = true
-                error.value = ""
-
-                 */
-            } else {
-                inputPin.clear()
-                Toast.makeText(
-                    context,
-                    "Incorrect code, try another one",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
+//    if (inputPin.size == 5) {
+//        LaunchedEffect("any") {
+//            //delay(300)
+//
+//
+//            if (inputPin.joinToString("") == sharedPreferences.getString("code","")) {
+//                showSuccess.value = true
+//                error.value = ""
+//                /*
+//            if (inputPin.joinToString("") == password) {
+//                showSuccess.value = true
+//                error.value = ""
+//
+//                 */
+//            } else {
+//                inputPin.clear()
+//                Toast.makeText(
+//                    context,
+//                    "Incorrect code, try another one",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//    }
 
     Column(
         modifier = Modifier
@@ -109,11 +112,11 @@ fun Passcode(
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                if (showSuccess.value) {
-                    //Text(text = "Great")
-                    navController.navigate("home")
-
-                } else {
+//                if (showSuccess.value) {
+//                    //Text(text = "Great")
+//                    navController.navigate("home")
+//
+//                } else {
                     Row {
                         (0 until pinSize).forEach {
                             Icon(
@@ -126,7 +129,7 @@ fun Passcode(
                             )
                         }
                     }
-                }
+//                }
 
 
             }
@@ -147,7 +150,10 @@ fun Passcode(
                 ) {
                     (1..3).forEach {
                         PinKeyItem(
-                            onClick = { inputPin.add(it) }
+                            onClick = {
+//                                inputPin.add(it)
+                                processPin(sharedPreferences, navController, inputPin, it)
+                            }
                         ) {
                             Text(
                                 text = it.toString(),
@@ -163,7 +169,10 @@ fun Passcode(
                 ) {
                     (4..6).forEach {
                         PinKeyItem(
-                            onClick = { inputPin.add(it) }
+                            onClick = {
+//                                inputPin.add(it)
+                                processPin(sharedPreferences, navController, inputPin, it)
+                            }
                         ) {
                             Text(
                                 text = it.toString(),
@@ -179,7 +188,10 @@ fun Passcode(
                 ) {
                     (7..9).forEach {
                         PinKeyItem(
-                            onClick = { inputPin.add(it) }
+                            onClick = {
+//                                inputPin.add(it)
+                                processPin(sharedPreferences, navController, inputPin, it)
+                            }
                         ) {
                             Text(
                                 text = it.toString(),
@@ -205,7 +217,10 @@ fun Passcode(
                             .clickable { }
                     )
                     PinKeyItem(
-                        onClick = { inputPin.add(0) },
+                        onClick = {
+//                            inputPin.add(0)
+                            processPin(sharedPreferences, navController, inputPin, 0)
+                                  },
                         modifier = Modifier.padding(
                             horizontal = 16.dp,
                             vertical = 8.dp
@@ -233,10 +248,38 @@ fun Passcode(
         }
     }
 
-
-
 }
 
+fun processPin(
+    sharedPreferences: SharedPreferences,
+    navController: NavController,
+    inputPin: SnapshotStateList<Int>,
+    value: Int
+) {
+    inputPin.add(value)
+    if (inputPin.size == 5) {
+        checkPin(
+            sharedPreferences, navController, inputPin
+        )
+    }
+}
+
+private fun checkPin(
+    sharedPreferences: SharedPreferences,
+    navController: NavController,
+    inputPin: SnapshotStateList<Int>,
+) {
+    if (inputPin.joinToString("") == sharedPreferences.getString("code","")) {
+        navController.navigate("home")
+    } else {
+                inputPin.clear()
+//                Toast.makeText(
+//                    context,
+//                    "Incorrect code, try another one",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+    }
+}
 
 
 @Composable
