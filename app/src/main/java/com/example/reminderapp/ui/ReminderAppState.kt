@@ -1,4 +1,4 @@
-package com.example.reminderapp
+package com.example.reminderapp.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

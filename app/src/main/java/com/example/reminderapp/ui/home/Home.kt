@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.reminderapp.R
 import com.example.reminderapp.ui.home.reminderMessages.ReminderMessages
@@ -22,6 +22,7 @@ import com.google.accompanist.insets.systemBarsPadding
 
 @Composable
 fun Home(
+    viewModel: HomeViewModel = viewModel(),
     navController: NavController
 
 ) {

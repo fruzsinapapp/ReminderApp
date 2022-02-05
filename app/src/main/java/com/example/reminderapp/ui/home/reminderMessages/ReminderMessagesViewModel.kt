@@ -2,6 +2,7 @@ package com.example.reminderapp.ui.home.reminderMessages
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.reminderapp.Graph.reminderRepository
 import com.example.reminderapp.data.entity.Reminder
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +15,13 @@ class ReminderMessagesViewModel: ViewModel(){
     val state: StateFlow<ReminderMessagesViewState>
         get() = _state
 
+
+    init {
+        viewModelScope.launch {
+            reminderRepository.reminders()
+        }
+    }
+    /*
     init {
         val list = mutableListOf<Reminder>()
         for (x in 1..20) {
@@ -32,6 +40,7 @@ class ReminderMessagesViewModel: ViewModel(){
             )
         }
     }
+    */
 }
 
 

@@ -80,9 +80,9 @@ private fun ReminderListItem(
             }
         )
 
-        //title
+        //message
         Text(
-            text = reminder.reminderTitle,
+            text = reminder.message,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderTitle) {
@@ -98,7 +98,26 @@ private fun ReminderListItem(
             }
         )
 
-        // date
+        //creator ID
+        Text(
+            text = reminder.creatorId,
+            maxLines = 1,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.constrainAs(reminderTitle) {
+                linkTo(
+                    start = parent.start,
+                    end = parent.end,
+                    startMargin = 24.dp,
+                    endMargin = 16.dp,
+                    bias = 0f
+                )
+                top.linkTo(parent.top, margin = 10.dp)
+                width = Dimension.preferredWrapContent
+            }
+        )
+
+        //date
+        /*
         Text(
             text = when {
                 reminder.reminderDate != null -> {
@@ -122,6 +141,8 @@ private fun ReminderListItem(
                 bottom.linkTo(parent.bottom, 10.dp)
             }
         )
+
+         */
 
 
     }
