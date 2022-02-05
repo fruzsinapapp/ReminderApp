@@ -67,13 +67,7 @@ fun Login(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
-            /*
-            Icon(
-                imageVector = Icons.Default.AccountBox,
-                contentDescription = null,
-                modifier = Modifier.size(200.dp)
-            )
-             */
+
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
                 value = username.value,
@@ -106,13 +100,11 @@ fun Login(
                         navController.navigate("home")
                     }
                     else {
-
                         Toast.makeText(
                             context,
                             "Please enter a username and a password",
                             Toast.LENGTH_SHORT
                         ).show()
-
                     }
 
                 } ,

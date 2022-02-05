@@ -23,7 +23,6 @@ fun ReminderApp(
 
 ){
     NavHost(
-
         navController = appState.navController,
         startDestination = "authentication"
     ){
@@ -35,9 +34,7 @@ fun ReminderApp(
             Passcode(navController = appState.navController,sharedPreferences)
         }
         composable(route="login") {
-
-            Login(navController = appState.navController,sharedPreferences) //to log in we need a button, and this button will use a navcontroller
-            //Login()
+            Login(navController = appState.navController,sharedPreferences)
         }
         composable(route="home"){
             Home(navController = appState.navController)

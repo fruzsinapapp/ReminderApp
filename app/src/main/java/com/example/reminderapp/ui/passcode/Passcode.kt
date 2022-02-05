@@ -48,8 +48,8 @@ fun Passcode(
     sharedPreferences: SharedPreferences
 ) {
     val inputPin = remember { mutableStateListOf<Int>() }
-    val error = remember { mutableStateOf<String>("") }
-    val showSuccess = remember { mutableStateOf(false) }
+    //val error = remember { mutableStateOf<String>("") }
+    //val showSuccess = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Column(
@@ -149,7 +149,6 @@ fun Passcode(
                     (7..9).forEach {
                         PinKeyItem(
                             onClick = {
-//                                inputPin.add(it)
                                 processPin(sharedPreferences, navController, inputPin, it, context)
                             }
                         ) {
@@ -178,7 +177,6 @@ fun Passcode(
                     )
                     PinKeyItem(
                         onClick = {
-//                            inputPin.add(0)
                             processPin(sharedPreferences, navController, inputPin, 0,context)
                         },
                         modifier = Modifier.padding(
@@ -218,7 +216,7 @@ fun processPin(
     context: Context
 ) {
     inputPin.add(value)
-    if (inputPin.size == 5) {
+    if (inputPin.size == pinSize) {
         checkPin(
             sharedPreferences, navController, inputPin,context
         )
@@ -255,7 +253,7 @@ fun PinKeyItem(
     ),
     backgroundColor: Color = MaterialTheme.colors.primaryVariant,
     contentColor: Color = contentColorFor(backgroundColor = backgroundColor),
-    elevation: Dp = 4.dp,
+    //elevation: Dp = 4.dp,
     content: @Composable () -> Unit
 ) {
     Button(
