@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 
 
 const val pinSize = 5
-//const val password = "00000" //sample password
 
 
 @Composable

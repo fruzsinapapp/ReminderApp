@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -31,7 +33,8 @@ fun Profile(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .systemBarsPadding()
+                .systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally
 
         ){
             TopAppBar {
@@ -46,7 +49,27 @@ fun Profile(
                 Text(text = "Main page")
             }
 
-            
+            Icon(
+                imageVector = Icons.Default.AccountCircle,
+                contentDescription = null,
+                modifier = Modifier.size(200.dp),
+            )
+            Text(
+                text = "Name",
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier.padding(16.dp),
+                color = Color.Black)
+            Text(
+                text = "Age",
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier.padding(16.dp),
+                color = Color.Black)
+
+            Text(
+                text = "Email",
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier.padding(16.dp),
+                color = Color.Black)
 
 
             Image(
@@ -55,7 +78,8 @@ fun Profile(
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds
             )
-            Text(text = "Profile")
+
+
         }
     }
 }
