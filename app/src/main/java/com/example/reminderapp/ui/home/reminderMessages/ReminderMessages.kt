@@ -71,7 +71,7 @@ private fun ReminderListItem(
     modifier: Modifier = Modifier
 ){
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderTitle, reminderDate) = createRefs()
+        val (divider, reminderMessage, reminderTime) = createRefs()
         Divider(
             Modifier.constrainAs(divider){
                 top.linkTo(parent.top)
@@ -82,10 +82,12 @@ private fun ReminderListItem(
 
         //title
         Text(
-            text = reminder.reminderTitle,
+
+            //text = reminder.reminderTitle,
+            text = reminder.reminderMessage,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.constrainAs(reminderTitle) {
+            modifier = Modifier.constrainAs(reminderMessage) {
                 linkTo(
                     start = parent.start,
                     end = parent.end,
@@ -100,6 +102,25 @@ private fun ReminderListItem(
 
         // date
         Text(
+            //text = reminder.reminderTime.toString(),
+            text="",
+            maxLines = 1,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.constrainAs(reminderTime) {
+                linkTo(
+                    start = reminderMessage.end,
+                    end = reminderMessage.start,
+                    startMargin = 8.dp,
+                    endMargin = 16.dp,
+                    bias = 0f // float this towards the start. this was is the fix we needed
+                )
+                top.linkTo(reminderMessage.bottom, 6.dp)
+                bottom.linkTo(parent.bottom, 10.dp)
+            }
+        )
+
+
+            /*
             text = when {
                 reminder.reminderDate != null -> {
                     reminder.reminderDate.formatToString()
@@ -121,7 +142,7 @@ private fun ReminderListItem(
                 top.linkTo(reminderTitle.bottom, 6.dp)
                 bottom.linkTo(parent.bottom, 10.dp)
             }
-        )
+             */
 
 
     }
