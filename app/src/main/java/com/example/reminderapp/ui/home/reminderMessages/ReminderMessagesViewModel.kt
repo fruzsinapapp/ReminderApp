@@ -31,31 +31,10 @@ class ReminderMessagesViewModel(
         }
 
     }
-    /*
-    init {
-        val list = mutableListOf<Reminder>()
-        for (x in 1..20) {
-            list.add(
-                Reminder(
-                    reminderId = x.toLong(),
 
-                    reminderMessage = "$x reminder",
-                    reminderTime = "123"
-                    /*
-                    reminderTitle = "$x reminder",
-                    reminderDate = Date()
-                     */
-                )
-            )
-        }
-
-        viewModelScope.launch {
-            _state.value = ReminderMessagesViewState(
-                reminders = list
-            )
-        }
+     suspend fun deleteReminder(reminder: Reminder): Int {
+        return reminderRepository.deleteReminder(reminder)
     }
-     */
 }
 
 

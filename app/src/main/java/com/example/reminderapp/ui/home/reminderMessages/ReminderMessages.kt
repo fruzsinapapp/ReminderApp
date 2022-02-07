@@ -10,16 +10,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+
 import androidx.compose.material.icons.Icons
+
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ExitToApp
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
@@ -32,6 +34,10 @@ import com.codemave.mobilecomputing.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.ui.reminder.ReminderViewModel
+import com.example.reminderapp.ui.reminder.ReminderViewState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,17 +51,23 @@ fun ReminderMessages(
         factory = viewModelProviderFactoryOf{ReminderMessagesViewModel()}
     )
     val viewState by viewModel.state.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier ) {
         ReminderList(
-            list = viewState.reminders
+            list = viewState.reminders,
+            coroutineScope = coroutineScope,
+            viewModel = viewModel()
+
         )
     }
 }
 
 @Composable
 private fun ReminderList(
-    list: List<Reminder>
+    list: List<Reminder>,
+    coroutineScope: CoroutineScope,
+    viewModel: ReminderMessagesViewModel
 ) {
     LazyColumn(
         contentPadding = PaddingValues(0.dp),
@@ -63,23 +75,28 @@ private fun ReminderList(
     ){
         items(list) {item ->
             ReminderListItem(
-               reminder = item,
-               onClick={},
-               modifier = Modifier.fillParentMaxWidth()
+                coroutineScope= coroutineScope,
+                reminder = item,
+                onClick={},
+                modifier = Modifier.fillParentMaxWidth(),
+                viewModel = viewModel
             )
         }
     }
 }
 
 
+
 @Composable
 private fun ReminderListItem(
+    coroutineScope: CoroutineScope,
     reminder: Reminder,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ReminderMessagesViewModel
 ){
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderMessage, reminderTime) = createRefs()
+        val (divider, reminderMessage, reminderTime, icon) = createRefs()
         Divider(
             Modifier.constrainAs(divider){
                 top.linkTo(parent.top)
@@ -98,7 +115,7 @@ private fun ReminderListItem(
             modifier = Modifier.constrainAs(reminderMessage) {
                 linkTo(
                     start = parent.start,
-                    end = parent.end,
+                    end = icon.start,
                     startMargin = 24.dp,
                     endMargin = 16.dp,
                     bias = 0f
@@ -117,7 +134,7 @@ private fun ReminderListItem(
             modifier = Modifier.constrainAs(reminderTime) {
                 linkTo(
                     start = reminderMessage.end,
-                    end = reminderMessage.start,
+                    end = icon.start,
                     startMargin = 8.dp,
                     endMargin = 16.dp,
                     bias = 0f // float this towards the start. this was is the fix we needed
@@ -126,6 +143,31 @@ private fun ReminderListItem(
                 bottom.linkTo(parent.bottom, 10.dp)
             }
         )
+
+
+
+
+
+        IconButton(
+            onClick = {
+                coroutineScope.launch {
+                viewModel.deleteReminder(reminder)
+            }
+                },
+            modifier = Modifier
+                .size(50.dp)
+                .padding(6.dp)
+                .constrainAs(icon) {
+                    top.linkTo(parent.top, 10.dp)
+                    bottom.linkTo(parent.bottom, 10.dp)
+                    end.linkTo(parent.end)
+                }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = stringResource(R.string.delete)
+            )
+        }
 
 
 
