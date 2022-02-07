@@ -38,9 +38,9 @@ fun Home(
 
     val viewState by viewModel .state.collectAsState()
 
-    val selectedReminder = viewState.selectedReminder
+    //val selectedReminder = viewState.selectedReminder
 
-    if(viewState.reminders.isNotEmpty() && selectedReminder!=null){
+    if(viewState.reminders.isNotEmpty()){
         Surface(modifier = Modifier.fillMaxSize()){
             HomeContent(
                 reminders=viewState.reminders,
@@ -83,20 +83,23 @@ fun HomeContent(
                 backgroundColor = appBarColor,
                 navController = navController)
 
+            /*
             ReminderList(
                 reminders = reminders
             )
-            /*
+             */
+
             ReminderMessages(
                 modifier = Modifier.fillMaxSize()
             )
-             */
+
         }
     }
 
 
 }
 
+/*
 @Composable
 private fun ReminderList(
     reminders: List<Reminder>
@@ -173,7 +176,7 @@ private fun ReminderListItem(
 
     }
 }
-
+*/
 
 @Composable
 private  fun HomeAppBar(

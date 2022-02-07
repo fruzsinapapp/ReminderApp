@@ -6,8 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
@@ -23,8 +23,11 @@ import java.util.*
 
 @Composable
 fun Reminder(
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
+    viewModel: ReminderViewModel = viewModel()
 ) {
+    val viewState by viewModel.state.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     val message = rememberSaveable { mutableStateOf("") }
     val reminderTime = rememberSaveable { mutableStateOf("") }
@@ -75,24 +78,19 @@ fun Reminder(
                     value = reminderTime.value,
                     onValueChange = { reminderTime.value = it },
                     label = { Text(text = "Reminder time")},
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
-                    )
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
-                /*
+
                 Button(
                     enabled = true,
                     onClick = {
                         coroutineScope.launch {
-                            viewModel.savePayment(
-                                com.codemave.mobilecomputing.data.entity.Payment(
-                                    paymentTitle = title.value,
-                                    paymentAmount = amount.value.toDouble(),
-                                    paymentDate = Date().time,
-                                    paymentCategoryId = getCategoryId(viewState.categories, category.value)
+                            viewModel.saveReminder(
+                                com.example.reminderapp.data.entity.Reminder(
+                                    reminderMessage = message.value,
+                                    reminderTime = reminderTime.value
                                 )
                             )
                         }
@@ -101,10 +99,9 @@ fun Reminder(
                     modifier = Modifier
                         .fillMaxWidth()
                         .size(55.dp)
-                ) {
-                    Text("Save payment")
+                ){
+                    Text("Save reminder")
                 }
-                */
             }
         }
     }

@@ -1,3 +1,4 @@
+
 package com.example.reminderapp.ui.home.reminderMessages
 
 import androidx.compose.foundation.clickable
@@ -27,16 +28,22 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.codemave.mobilecomputing.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
+import com.example.reminderapp.ui.reminder.ReminderViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 @Composable
 fun ReminderMessages(
     modifier: Modifier = Modifier
 ){
-    val viewModel: ReminderMessagesViewModel = viewModel()
+    val viewModel: ReminderMessagesViewModel = viewModel(
+        key = "reminder_list",
+        factory = viewModelProviderFactoryOf{ReminderMessagesViewModel()}
+    )
     val viewState by viewModel.state.collectAsState()
 
     Column(modifier = modifier ) {
@@ -63,6 +70,7 @@ private fun ReminderList(
         }
     }
 }
+
 
 @Composable
 private fun ReminderListItem(
@@ -120,30 +128,6 @@ private fun ReminderListItem(
         )
 
 
-            /*
-            text = when {
-                reminder.reminderDate != null -> {
-                    reminder.reminderDate.formatToString()
-                }
-                else -> Date().formatToString()
-            },
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.constrainAs(reminderDate) {
-                linkTo(
-                    start = reminderTitle.end,
-                    end = reminderTitle.start,
-                    startMargin = 8.dp,
-                    endMargin = 16.dp,
-                    bias = 0f // float this towards the start. this was is the fix we needed
-                )
-                centerVerticallyTo(reminderTitle)
-                top.linkTo(reminderTitle.bottom, 6.dp)
-                bottom.linkTo(parent.bottom, 10.dp)
-            }
-             */
-
 
     }
 }
@@ -151,3 +135,5 @@ private fun ReminderListItem(
 private fun Date.formatToString(): String {
     return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(this)
 }
+
+
