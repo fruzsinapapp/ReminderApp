@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class ReminderDao {
 
-    @Query("""SELECT * FROM reminders WHERE id = :reminderId""")
-    abstract fun reminder(reminderId: Long): Reminder?
+    @Query("SELECT * FROM reminders WHERE id = :reminderId")
+    abstract suspend fun reminder(reminderId: Long): Reminder?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(entity: Reminder): Long
@@ -23,7 +23,8 @@ abstract class ReminderDao {
 
 
     @Query("SELECT * FROM reminders LIMIT 15")
-    abstract fun categories(): Flow<List<Reminder>>
+    abstract fun reminders(): Flow<List<Reminder>>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAll(entities: Collection<Reminder>)

@@ -40,7 +40,7 @@ fun Home(
 
     val selectedReminder = viewState.selectedReminder
 
-    if(viewState.reminders.isNotEmpty()){
+    if(viewState.reminders.isNotEmpty() && selectedReminder!=null){
         Surface(modifier = Modifier.fillMaxSize()){
             HomeContent(
                 reminders=viewState.reminders,

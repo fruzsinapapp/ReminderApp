@@ -21,9 +21,12 @@ class HomeViewModel(
     val state: StateFlow<HomeViewState>
         get() = _state
 
+
     fun onReminderSelected(reminder: Reminder){
         _selectedReminder.value = reminder
     }
+
+
 
     init {
         viewModelScope.launch {
