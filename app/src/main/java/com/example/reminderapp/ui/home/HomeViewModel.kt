@@ -48,7 +48,7 @@ class HomeViewModel(
         //loadRemindersFromDb()
     }
 
-    /*
+/*
     private fun loadRemindersFromDb(){
         val list = mutableListOf(
             Reminder(reminderMessage = "Test1",reminderTime = "23"),
@@ -60,7 +60,9 @@ class HomeViewModel(
             list.forEach{reminder -> reminderRepository.addReminder(reminder)}
         }
     }
-    */
+    
+ */
+
 }
 
 data class HomeViewState(

@@ -90,7 +90,8 @@ fun HomeContent(
              */
 
             ReminderMessages(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                navController = navController
             )
 
         }
@@ -196,7 +197,7 @@ private  fun HomeAppBar(
         backgroundColor = backgroundColor,
         actions = {
             IconButton( onClick = {navController.navigate("authentication") } ) {
-                Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = stringResource(R.string.search))
+                Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = stringResource(R.string.exit))
             }
             IconButton( onClick = {navController.navigate("profile") } ) {
                 Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = stringResource(R.string.account))

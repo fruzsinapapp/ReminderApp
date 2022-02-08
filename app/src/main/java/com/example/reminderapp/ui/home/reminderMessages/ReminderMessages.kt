@@ -17,6 +17,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Update
+//import androidx.compose.material.icons.filled.Update
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.codemave.mobilecomputing.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
@@ -44,7 +47,8 @@ import java.util.*
 
 @Composable
 fun ReminderMessages(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ){
     val viewModel: ReminderMessagesViewModel = viewModel(
         key = "reminder_list",
@@ -57,7 +61,8 @@ fun ReminderMessages(
         ReminderList(
             list = viewState.reminders,
             coroutineScope = coroutineScope,
-            viewModel = viewModel()
+            viewModel = viewModel(),
+            navController = navController
 
         )
     }
@@ -67,7 +72,8 @@ fun ReminderMessages(
 private fun ReminderList(
     list: List<Reminder>,
     coroutineScope: CoroutineScope,
-    viewModel: ReminderMessagesViewModel
+    viewModel: ReminderMessagesViewModel,
+    navController: NavController
 ) {
     LazyColumn(
         contentPadding = PaddingValues(0.dp),
@@ -77,7 +83,7 @@ private fun ReminderList(
             ReminderListItem(
                 coroutineScope= coroutineScope,
                 reminder = item,
-                onClick={},
+                onClick={navController.navigate("edit")},
                 modifier = Modifier.fillParentMaxWidth(),
                 viewModel = viewModel
             )
@@ -128,9 +134,9 @@ private fun ReminderListItem(
         // date
         Text(
             //text = reminder.reminderTime.toString(),
-            text="",
+            text=reminder.reminderTime,
             maxLines = 1,
-            style = MaterialTheme.typography.caption,
+            style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderTime) {
                 linkTo(
                     start = reminderMessage.end,
@@ -139,8 +145,8 @@ private fun ReminderListItem(
                     endMargin = 16.dp,
                     bias = 0f // float this towards the start. this was is the fix we needed
                 )
-                top.linkTo(reminderMessage.bottom, 6.dp)
-                bottom.linkTo(parent.bottom, 10.dp)
+                top.linkTo(parent.top, 10.dp)
+                //bottom.linkTo(parent.bottom, 10.dp)
             }
         )
 
@@ -157,11 +163,13 @@ private fun ReminderListItem(
             modifier = Modifier
                 .size(50.dp)
                 .padding(6.dp)
+
                 .constrainAs(icon) {
                     top.linkTo(parent.top, 10.dp)
                     bottom.linkTo(parent.bottom, 10.dp)
                     end.linkTo(parent.end)
                 }
+
         ) {
             Icon(
                 imageVector = Icons.Filled.Delete,
@@ -169,6 +177,32 @@ private fun ReminderListItem(
             )
         }
 
+
+/*
+        IconButton(
+            onClick = {
+                coroutineScope.launch {
+                    viewModel.updateReminder(reminder)
+                }
+            },
+            modifier = Modifier
+                .size(50.dp)
+                .padding(6.dp)
+
+                .constrainAs(icon) {
+                    top.linkTo(parent.top, 10.dp)
+                    bottom.linkTo(parent.bottom, 10.dp)
+                    start.linkTo(icon.end)
+                }
+
+
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Update,
+                contentDescription = stringResource(R.string.update)
+            )
+        }
+ */
 
 
     }

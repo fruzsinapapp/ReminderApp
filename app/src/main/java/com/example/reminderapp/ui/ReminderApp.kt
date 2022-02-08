@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import com.example.reminderapp.ReminderAppState
 import com.example.reminderapp.rememberReminderAppState
 import com.example.reminderapp.ui.authentication.Authentication
+import com.example.reminderapp.ui.edit.Edit
 import com.example.reminderapp.ui.home.Home
 import com.example.reminderapp.ui.login.Login
 import com.example.reminderapp.ui.passcode.Passcode
@@ -46,6 +47,11 @@ fun ReminderApp(
 
         composable(route="reminder"){
             Reminder(onBackPress = appState::navigateBack)
+        }
+
+
+        composable(route="edit"){
+            Edit(onBackPress = appState::navigateBack)
         }
     }
 }

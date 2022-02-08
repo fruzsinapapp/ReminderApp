@@ -35,6 +35,10 @@ class ReminderMessagesViewModel(
      suspend fun deleteReminder(reminder: Reminder): Int {
         return reminderRepository.deleteReminder(reminder)
     }
+
+    suspend fun updateReminder(reminder: Reminder) {
+        return reminderRepository.updateReminder(reminder)
+    }
 }
 
 
