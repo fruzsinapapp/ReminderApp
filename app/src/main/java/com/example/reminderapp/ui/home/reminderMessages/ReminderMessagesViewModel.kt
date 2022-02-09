@@ -5,18 +5,29 @@ import androidx.lifecycle.viewModelScope
 import com.example.reminderapp.Graph
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.data.repository.ReminderRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
 
 
 
 class ReminderMessagesViewModel(
-    private val reminderRepository: ReminderRepository = Graph.reimderRepository
+    private val reminderRepository: ReminderRepository = Graph.reimderRepository,
+
+    //private val reminderId: Long
+
 ): ViewModel(){
     private val _state = MutableStateFlow(ReminderMessagesViewState())
+
+    /*
+    private val _selectedReminder= MutableStateFlow<Reminder?>(null)
+    fun onReminderSelected(reminder: Reminder){
+        _selectedReminder.value = reminder
+    }
+
+     */
+
+
 
     val state: StateFlow<ReminderMessagesViewState>
         get() = _state
@@ -28,6 +39,24 @@ class ReminderMessagesViewModel(
                     reminders = list
                 )
             }
+            /*
+            combine(
+                reminderRepository.reminders().onEach { list ->
+                    _state.value = ReminderMessagesViewState(
+                        reminders = list
+                    )
+                },
+                _selectedReminder
+            ){reminders, selectedReminder ->
+                ReminderMessagesViewState(
+                    reminders = reminders,
+                    selectedReminder = selectedReminder
+                )
+
+            }.collect{_state.value = it}
+            */
+
+
         }
 
     }
@@ -36,14 +65,20 @@ class ReminderMessagesViewModel(
         return reminderRepository.deleteReminder(reminder)
     }
 
+   /*
     suspend fun updateReminder(reminder: Reminder) {
         return reminderRepository.updateReminder(reminder)
     }
+
+    */
 }
 
 
 data class ReminderMessagesViewState(
-    val reminders: List<Reminder> = emptyList()
+    val reminders: List<Reminder> = emptyList(),
+
+
+    //val selectedReminder: Reminder? = null
 )
 
 

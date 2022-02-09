@@ -29,4 +29,6 @@ abstract class ReminderDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAll(entities: Collection<Reminder>)
 
+    @Query("SELECT *FROM reminders WHERE id = :reminderId ")
+    abstract suspend fun getReminderWithId(reminderId: Long):Reminder?
 }

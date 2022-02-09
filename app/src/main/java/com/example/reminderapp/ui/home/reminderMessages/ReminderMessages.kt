@@ -1,6 +1,7 @@
 
 package com.example.reminderapp.ui.home.reminderMessages
 
+import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,11 +32,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.codemave.mobilecomputing.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
+import com.example.reminderapp.ui.edit.Edit
 import com.example.reminderapp.ui.reminder.ReminderViewModel
 import com.example.reminderapp.ui.reminder.ReminderViewState
 import kotlinx.coroutines.CoroutineScope
@@ -75,15 +78,20 @@ private fun ReminderList(
     viewModel: ReminderMessagesViewModel,
     navController: NavController
 ) {
+
+
     LazyColumn(
         contentPadding = PaddingValues(0.dp),
         verticalArrangement = Arrangement.Center
     ){
+
+
         items(list) {item ->
+
             ReminderListItem(
                 coroutineScope= coroutineScope,
                 reminder = item,
-                onClick={navController.navigate("edit")},
+                onClick={ navController.navigate("edit")},
                 modifier = Modifier.fillParentMaxWidth(),
                 viewModel = viewModel
             )
@@ -101,6 +109,12 @@ private fun ReminderListItem(
     modifier: Modifier = Modifier,
     viewModel: ReminderMessagesViewModel
 ){
+    //?????????
+    /*
+    val viewState by viewModel .state.collectAsState()
+    val selectedReminder = viewState.selectedReminder
+*/
+
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
         val (divider, reminderMessage, reminderTime, icon) = createRefs()
         Divider(
@@ -109,7 +123,12 @@ private fun ReminderListItem(
                 centerHorizontallyTo(parent)
                 width = Dimension.fillToConstraints
             }
+
         )
+
+
+        //Edit(reminderId = 2,modifier = modifier)
+
 
         //title
         Text(
