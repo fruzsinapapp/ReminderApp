@@ -40,6 +40,10 @@ class ReminderMessagesViewModel(
         return reminderRepository.deleteReminder(reminder)
     }
 
+    suspend fun updateSeen(seen: Boolean,id: Long) {
+        return reminderRepository.updateSeen(seen, id)
+    }
+
 }
 
 data class ReminderMessagesViewState(

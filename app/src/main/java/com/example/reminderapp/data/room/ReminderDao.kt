@@ -22,6 +22,8 @@ abstract class ReminderDao {
     @Query("UPDATE reminders SET reminder_message = :message, reminder_time = :time WHERE id = :id")
     abstract suspend fun updateTest(message: String,  time: String,  id: Long)
 
+    @Query("UPDATE reminders SET reminder_seen = :seen WHERE id = :id")
+    abstract suspend fun updateSeen(seen: Boolean,  id: Long)
 
     @Query("SELECT * FROM reminders LIMIT 15")
     abstract fun reminders(): Flow<List<Reminder>>

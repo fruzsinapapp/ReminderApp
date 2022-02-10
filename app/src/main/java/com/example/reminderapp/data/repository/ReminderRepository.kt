@@ -20,6 +20,10 @@ class ReminderRepository(
         return reminderDao.updateTest(message,time, id)
     }
 
+    suspend fun updateSeen(seen: Boolean, id:Long){
+        return reminderDao.updateSeen(seen, id)
+    }
+
     suspend fun deleteReminder(reminder: Reminder):Int{
         return reminderDao.delete(reminder)
     }

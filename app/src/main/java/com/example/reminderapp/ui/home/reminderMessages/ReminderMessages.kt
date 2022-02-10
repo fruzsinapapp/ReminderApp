@@ -169,7 +169,7 @@ fun ReminderMessages(
         // date
         Text(
             //text = reminder.reminderTime.toString(),
-            text=reminder.reminderTime,
+            text=reminder.reminderSeen.toString(),
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderTime) {
@@ -214,8 +214,9 @@ fun ReminderMessages(
         IconButton(
             onClick = {
                 coroutineScope.launch {
-                    viewModel.deleteReminder(reminder)
+                    viewModel.updateSeen(true, reminder.reminderId)
                 }
+
             },
             modifier = Modifier
                 .size(50.dp)

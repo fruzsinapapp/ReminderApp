@@ -37,10 +37,10 @@ class HomeViewModel(
 
     private fun loadRemindersFromDb(){
         val list = mutableListOf(
-            Reminder(reminderMessage = "Test1",reminderTime = "23"),
-            Reminder(reminderMessage = "Test2",reminderTime = "24"),
-            Reminder(reminderMessage = "Test3",reminderTime = "43"),
-            Reminder(reminderMessage = "Test4",reminderTime = "55")
+            Reminder(reminderMessage = "Test1",reminderTime = "23",reminderSeen = false),
+            Reminder(reminderMessage = "Test2",reminderTime = "24",reminderSeen = false),
+            Reminder(reminderMessage = "Test3",reminderTime = "43",reminderSeen = false),
+            Reminder(reminderMessage = "Test4",reminderTime = "55",reminderSeen = false)
         )
         viewModelScope.launch {
             list.forEach{reminder -> reminderRepository.addReminder(reminder)}

@@ -90,7 +90,8 @@ fun Reminder(
                             viewModel.saveReminder(
                                 com.example.reminderapp.data.entity.Reminder(
                                     reminderMessage = message.value,
-                                    reminderTime = reminderTime.value
+                                    reminderTime = reminderTime.value,
+                                    reminderSeen = false
                                 )
                             )
                         }
