@@ -1,8 +1,6 @@
 package com.example.reminderapp.ui
 
-import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -49,11 +47,19 @@ fun ReminderApp(
             Reminder(onBackPress = appState::navigateBack)
         }
 
-        /*
-        composable(route="edit"){
-            Edit(navController = appState.navController)
+
+        composable(route="edit/{reminderId}"){
+            entry-> Edit(
+            navController = appState.navController,
+            (entry.arguments?.getString("reminderId")?:""),
+            onBackPress = appState::navigateBack
+        )
+
+
         }
 
-         */
+
+
+
     }
 }

@@ -33,7 +33,6 @@ import com.google.accompanist.insets.systemBarsPadding
 fun Home(
     viewModel: HomeViewModel = viewModel(),
     navController: NavController
-
 ) {
 
     val viewState by viewModel .state.collectAsState()
@@ -94,7 +93,11 @@ fun HomeContent(
                 navController = navController
             )
 
+                Text(text="Test")
+
+
         }
+
     }
 
 

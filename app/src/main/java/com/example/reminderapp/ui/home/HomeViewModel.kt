@@ -12,17 +12,12 @@ class HomeViewModel(
     private val reminderRepository: ReminderRepository = Graph.reimderRepository
 ): ViewModel() {
     private val _state = MutableStateFlow(HomeViewState())
-    //private val _selectedReminder = MutableStateFlow<Reminder?>(null)
+
 
     val state: StateFlow<HomeViewState>
         get() = _state
 
-/*
-    fun onReminderSelected(reminder: Reminder){
-        _selectedReminder.value = reminder
-    }
 
- */
 
 
     init {
@@ -34,23 +29,7 @@ class HomeViewModel(
                 )
             }
 
-            /*
-            combine(
-                reminderRepository.reminders().onEach { list ->
-                    if(list.isNotEmpty() && _selectedReminder.value == null){
-                        _selectedReminder.value = list[0]
-                    }
-                },
-                _selectedReminder
 
-            ) { reminders, selectedReminder ->
-                HomeViewState(
-                    reminders = reminders,
-                    //selectedReminder = selectedReminder
-                )
-            }.collect {_state.value = it}
-
-            */
         }
         //loadRemindersFromDb()
     }
@@ -74,9 +53,6 @@ class HomeViewModel(
 
 data class HomeViewState(
     val reminders: List<Reminder> = emptyList()
-
-    //val reminders: List<Reminder> = emptyList(),
-    //val selectedReminder: Reminder? = null
 )
 
 

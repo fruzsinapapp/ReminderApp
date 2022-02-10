@@ -1,4 +1,3 @@
-
 package com.example.reminderapp.ui.home.reminderMessages
 
 import android.os.Bundle
@@ -51,14 +50,30 @@ import java.util.*
 @Composable
 fun ReminderMessages(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
+    //selectedReminder: Reminder
+
 ){
+
+
+
+
+
+
     val viewModel: ReminderMessagesViewModel = viewModel(
         key = "reminder_list",
         factory = viewModelProviderFactoryOf{ReminderMessagesViewModel()}
     )
+
+
+
+
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    //val selectedReminder = viewState.selectedReminder
+
+
+    //val selectedReminder = viewState.selectedReminder
 
     Column(modifier = modifier ) {
         ReminderList(
@@ -72,7 +87,7 @@ fun ReminderMessages(
 }
 
 @Composable
-private fun ReminderList(
+ fun ReminderList(
     list: List<Reminder>,
     coroutineScope: CoroutineScope,
     viewModel: ReminderMessagesViewModel,
@@ -87,11 +102,15 @@ private fun ReminderList(
 
 
         items(list) {item ->
+        val reminderId:String = item.reminderId.toString()
 
             ReminderListItem(
                 coroutineScope= coroutineScope,
                 reminder = item,
-                onClick={ navController.navigate("edit")},
+                onClick={
+                    navController.navigate("edit/${reminderId}")
+                    println(reminderId)
+                        },
                 modifier = Modifier.fillParentMaxWidth(),
                 viewModel = viewModel
             )
@@ -102,18 +121,14 @@ private fun ReminderList(
 
 
 @Composable
-private fun ReminderListItem(
+ fun ReminderListItem(
     coroutineScope: CoroutineScope,
     reminder: Reminder,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ReminderMessagesViewModel
 ){
-    //?????????
-    /*
-    val viewState by viewModel .state.collectAsState()
-    val selectedReminder = viewState.selectedReminder
-*/
+
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
         val (divider, reminderMessage, reminderTime, icon) = createRefs()
@@ -176,9 +191,9 @@ private fun ReminderListItem(
         IconButton(
             onClick = {
                 coroutineScope.launch {
-                viewModel.deleteReminder(reminder)
-            }
-                },
+                    viewModel.deleteReminder(reminder)
+                }
+            },
             modifier = Modifier
                 .size(50.dp)
                 .padding(6.dp)
@@ -230,5 +245,6 @@ private fun ReminderListItem(
 private fun Date.formatToString(): String {
     return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(this)
 }
+
 
 
