@@ -32,7 +32,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.codemave.mobilecomputing.util.viewModelProviderFactoryOf
+import com.example.reminderapp.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.ui.edit.Edit

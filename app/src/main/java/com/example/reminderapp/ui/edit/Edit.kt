@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.codemave.mobilecomputing.util.viewModelProviderFactoryOf
+import com.example.reminderapp.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
