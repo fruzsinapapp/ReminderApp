@@ -13,11 +13,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.CheckCircle
 //import androidx.compose.material.icons.filled.Update
 
@@ -230,7 +227,7 @@ fun ReminderMessages(
 
         ) {
             Icon(
-                imageVector = Icons.Outlined.CheckCircle,
+                imageVector = if(reminder.reminderSeen) Icons.Filled.CheckCircle else Icons.Outlined.CheckCircle ,
                 contentDescription = stringResource(R.string.seen)
 
             )
