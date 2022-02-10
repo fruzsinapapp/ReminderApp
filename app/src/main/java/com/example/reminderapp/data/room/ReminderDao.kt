@@ -19,7 +19,8 @@ abstract class ReminderDao {
     @Delete
     abstract suspend fun delete(entity: Reminder): Int
 
-
+    @Query("UPDATE reminders SET reminder_message = :message, reminder_time = :time WHERE id = :id")
+    abstract suspend fun updateTest(message: String,  time: String,  id: Long)
 
 
     @Query("SELECT * FROM reminders LIMIT 15")

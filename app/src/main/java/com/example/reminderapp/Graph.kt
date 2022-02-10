@@ -14,7 +14,7 @@ object Graph {
         )
     }
     fun provide(context: Context){
-        database= Room.databaseBuilder(context, ReminderAppDatabase::class.java, "reminder.db")
+        database= Room.databaseBuilder(context, ReminderAppDatabase::class.java, "reminder2.db")
             .fallbackToDestructiveMigration()
             .build()
     }
