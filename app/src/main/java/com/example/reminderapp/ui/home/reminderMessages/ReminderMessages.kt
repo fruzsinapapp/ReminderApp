@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.outlined.CheckCircle
 //import androidx.compose.material.icons.filled.Update
 
 import androidx.compose.runtime.Composable
@@ -131,7 +132,7 @@ fun ReminderMessages(
 
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderMessage, reminderTime, icon) = createRefs()
+        val (divider, reminderMessage, reminderTime, icon1, icon2) = createRefs()
         Divider(
             Modifier.constrainAs(divider){
                 top.linkTo(parent.top)
@@ -155,7 +156,7 @@ fun ReminderMessages(
             modifier = Modifier.constrainAs(reminderMessage) {
                 linkTo(
                     start = parent.start,
-                    end = icon.start,
+                    end = icon1.start,
                     startMargin = 24.dp,
                     endMargin = 16.dp,
                     bias = 0f
@@ -174,7 +175,7 @@ fun ReminderMessages(
             modifier = Modifier.constrainAs(reminderTime) {
                 linkTo(
                     start = reminderMessage.end,
-                    end = icon.start,
+                    end = icon1.start,
                     startMargin = 8.dp,
                     endMargin = 16.dp,
                     bias = 0f // float this towards the start. this was is the fix we needed
@@ -198,7 +199,7 @@ fun ReminderMessages(
                 .size(50.dp)
                 .padding(6.dp)
 
-                .constrainAs(icon) {
+                .constrainAs(icon1) {
                     top.linkTo(parent.top, 10.dp)
                     bottom.linkTo(parent.bottom, 10.dp)
                     end.linkTo(parent.end)
@@ -208,6 +209,29 @@ fun ReminderMessages(
             Icon(
                 imageVector = Icons.Filled.Delete,
                 contentDescription = stringResource(R.string.delete)
+            )
+        }
+        IconButton(
+            onClick = {
+                coroutineScope.launch {
+                    viewModel.deleteReminder(reminder)
+                }
+            },
+            modifier = Modifier
+                .size(50.dp)
+                .padding(6.dp)
+
+                .constrainAs(icon2) {
+                    top.linkTo(parent.top, 10.dp)
+                    bottom.linkTo(parent.bottom, 10.dp)
+                    end.linkTo(icon1.start)
+                }
+
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
+                contentDescription = stringResource(R.string.seen)
+
             )
         }
 
@@ -242,8 +266,8 @@ fun ReminderMessages(
     }
 }
 
-private fun Date.formatToString(): String {
-    return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(this)
+private fun Long.toDateString(): String {
+    return SimpleDateFormat("dd. MM. yyyy", Locale.getDefault()).format(Date(this))
 }
 
 
