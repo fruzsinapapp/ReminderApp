@@ -44,8 +44,10 @@ fun Edit(
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    val newMessage = rememberSaveable { mutableStateOf("") }
-    val newTime = rememberSaveable { mutableStateOf("") }
+    val newMessage = remember { mutableStateOf("") }
+    val newTime = remember { mutableStateOf("") }
+    val date= remember{ mutableStateOf("")}
+
     val context = LocalContext.current
 
 
@@ -115,13 +117,6 @@ fun Edit(
 
 
 
-
-
-
-
-
-
-
                 /**
                  *
                  * Date picker
@@ -136,7 +131,7 @@ fun Edit(
                 month = calendar.get(Calendar.MONTH)
                 day = calendar.get(Calendar.DAY_OF_MONTH)
 
-                val date= remember{ mutableStateOf("")}
+
 
 
                 val datePickerDialog = DatePickerDialog(
@@ -156,7 +151,6 @@ fun Edit(
                     }) {
                     Text(text="Open picker")
                 }
-
 
 
 
@@ -186,6 +180,11 @@ fun Edit(
 
 
 }
+
+
+/**
+ * Not used
+ */
 
 @Composable
 fun ShowTimePicker(context: Context){
@@ -218,8 +217,6 @@ fun ShowTimePicker(context: Context){
 
 
 }
-
-
 
 @Composable
 fun ShowDatePicker(context: Context){

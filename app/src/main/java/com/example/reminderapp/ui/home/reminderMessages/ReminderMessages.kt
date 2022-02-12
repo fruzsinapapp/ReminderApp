@@ -49,29 +49,14 @@ import java.util.*
 fun ReminderMessages(
     modifier: Modifier = Modifier,
     navController: NavController,
-    //selectedReminder: Reminder
-
 ){
-
-
-
-
-
-
     val viewModel: ReminderMessagesViewModel = viewModel(
         key = "reminder_list",
         factory = viewModelProviderFactoryOf{ReminderMessagesViewModel()}
     )
 
-
-
-
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    //val selectedReminder = viewState.selectedReminder
-
-
-    //val selectedReminder = viewState.selectedReminder
 
     Column(modifier = modifier ) {
         ReminderList(
@@ -117,7 +102,6 @@ fun ReminderMessages(
 }
 
 
-
 @Composable
  fun ReminderListItem(
     coroutineScope: CoroutineScope,
@@ -139,13 +123,8 @@ fun ReminderMessages(
 
         )
 
-
-        //Edit(reminderId = 2,modifier = modifier)
-
-
         //message
         Text(
-
             text = reminder.reminderMessage,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
@@ -174,15 +153,15 @@ fun ReminderMessages(
                     end = icon1.start,
                     startMargin = 8.dp,
                     endMargin = 16.dp,
-                    bias = 0f // float this towards the start. this was is the fix we needed
+                    bias = 0f
                 )
                 top.linkTo(parent.top, 10.dp)
-                //bottom.linkTo(parent.bottom, 10.dp)
+
             }
         )
         // time
         Text(
-            //text = reminder.reminderTime.toString(),
+
             text=reminder.reminderTime.toString(),
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
@@ -192,16 +171,11 @@ fun ReminderMessages(
                     end = icon1.start,
                     startMargin = 8.dp,
                     endMargin = 16.dp,
-                    bias = 0f // float this towards the start. this was is the fix we needed
+                    bias = 0f
                 )
                 top.linkTo(parent.top, 10.dp)
-                //bottom.linkTo(parent.bottom, 10.dp)
             }
         )
-
-
-
-
 
         IconButton(
             onClick = {
@@ -249,35 +223,6 @@ fun ReminderMessages(
 
             )
         }
-
-
-/*
-        IconButton(
-            onClick = {
-                coroutineScope.launch {
-                    viewModel.updateReminder(reminder)
-                }
-            },
-            modifier = Modifier
-                .size(50.dp)
-                .padding(6.dp)
-
-                .constrainAs(icon) {
-                    top.linkTo(parent.top, 10.dp)
-                    bottom.linkTo(parent.bottom, 10.dp)
-                    start.linkTo(icon.end)
-                }
-
-
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Update,
-                contentDescription = stringResource(R.string.update)
-            )
-        }
- */
-
-
     }
 }
 

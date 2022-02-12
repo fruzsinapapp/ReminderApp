@@ -38,6 +38,10 @@ class EditViewModel(
     suspend fun updateTest(message: String, time: String, id: Long) {
         return reminderRepository.updateTest(message, time, id)
     }
+
+    suspend fun getReminderWithId(reminderId: Long): Reminder? {
+        return reminderRepository.getReminderWithId(reminderId)
+    }
 }
 
 
