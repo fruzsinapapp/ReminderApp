@@ -2,6 +2,8 @@ package com.example.reminderapp.ui.edit
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -83,62 +85,13 @@ fun Edit(
                 Spacer(modifier = Modifier.height(10.dp))
                 //Text(newtime.toString())
 
-                Button(
-                    enabled = true,
-                    onClick = {
-                        val cal = Calendar.getInstance()
-                        val timeSetListener = TimePickerDialog.OnTimeSetListener{ timePicker, hour, minute ->
-                            cal.set(Calendar.HOUR_OF_DAY, hour)
-                            cal.set(Calendar.MINUTE,minute)
-                        }
-                        TimePickerDialog(context,timeSetListener,cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),true).show()
-                        //Text(SimpleDateFormat("HH:mm").format(cal.time))
 
-                    },
+                ShowTimePicker(context = context)
 
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(55.dp)
-                ){
-                    Text("Choose time")
-                }
+                Spacer(modifier = Modifier.height(20.dp))
+                ShowDatePicker(context = context)
 
-
-
-
-                Button(
-                    enabled = true,
-                    onClick = {
-                        val c = Calendar.getInstance()
-                        val year = c.get(Calendar.YEAR)
-                        val month = c.get(Calendar.MONTH)
-                        val day = c.get(Calendar.DAY_OF_MONTH)
-
-
-
-                        val dpd = DatePickerDialog(context, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        }, year, month, day)
-                        dpd.show()
-
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(55.dp)
-                ){
-                    Text("Choose date")
-                }
-
-
-                /*
-                OutlinedTextField(
-                    value = newTime.value,
-                    onValueChange = { newTime.value = it },
-                    label = { Text(text = "New reminder time")},
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                 */
-
+                
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Button(
@@ -163,6 +116,74 @@ fun Edit(
         }
     }
 
+
+}
+
+@Composable
+fun ShowTimePicker(context: Context){
+    val calendar = Calendar.getInstance()
+    val hour = calendar[Calendar.HOUR_OF_DAY]
+    val minute = calendar[Calendar.MINUTE]
+
+    val time = remember{ mutableStateOf("")}
+
+    val timePickerDialog = TimePickerDialog(
+        context,
+        {_, hour : Int, minute : Int ->
+            time.value = "$hour:$minute"
+
+        }, hour, minute, true
+    )
+    val dateTest = time.value.toString()
+
+        Text(text="Selected time: ${time.value}")
+        Text(dateTest)
+        Spacer(modifier = Modifier.size(16.dp))
+        Button(
+            onClick = {
+                timePickerDialog.show()
+            }) {
+            Text(text="Open picker")
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+
+
+}
+
+
+
+@Composable
+fun ShowDatePicker(context: Context){
+    val year: Int
+    val month: Int
+    val day: Int
+
+    val calendar = Calendar.getInstance()
+
+    year = calendar.get(Calendar.YEAR)
+    month = calendar.get(Calendar.MONTH)
+    day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val date= remember{ mutableStateOf("")}
+
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _: DatePicker, year : Int, month  : Int, dayOfMonth : Int->
+            val monthCorr = month+1
+            date.value = "$dayOfMonth.$monthCorr.$year"
+
+        }, year, month, day
+    )
+
+        Text(text="Selected time: ${date.value}")
+        Spacer(modifier = Modifier.size(16.dp))
+        Button(
+            onClick = {
+                datePickerDialog.show()
+            }) {
+            Text(text="Open picker")
+        }
 
 }
 
