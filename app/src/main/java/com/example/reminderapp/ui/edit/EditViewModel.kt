@@ -35,7 +35,7 @@ class EditViewModel(
         return reminderRepository.deleteReminder(reminder)
     }
 
-    suspend fun updateTest(message: String, time: String, id: Long) {
+    suspend fun updateTest(message: String, time: Long, id: Long) {
         return reminderRepository.updateTest(message, time, id)
     }
 

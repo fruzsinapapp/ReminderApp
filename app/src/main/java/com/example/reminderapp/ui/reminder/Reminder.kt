@@ -2,6 +2,7 @@ package com.example.reminderapp.ui.reminder
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.os.Build
 import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -22,9 +23,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
+import android.widget.CalendarView
+
+import android.widget.CalendarView.OnDateChangeListener
+import android.widget.TimePicker
+import androidx.annotation.RequiresApi
 
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun Reminder(
     onBackPress: () -> Unit,
@@ -96,16 +105,25 @@ fun Reminder(
 
                 val date= remember{ mutableStateOf("")}
 
+                val dateSetListener = object : DatePickerDialog.OnDateSetListener {
+                    override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
+                                           dayOfMonth: Int) {
+                        calendar.set(Calendar.YEAR, year)
+                        calendar.set(Calendar.MONTH, monthOfYear)
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    }
+                }
 
                 val datePickerDialog = DatePickerDialog(
                     context,
-                    { _: DatePicker, year : Int, month  : Int, dayOfMonth : Int->
-                        val monthCorr = month+1
-                        date.value = "$dayOfMonth.$monthCorr.$year"
-
-                    }, year, month, day
+                    dateSetListener, year, month, day
                 )
-                reminderDate.value = date.value.toString()
+                //datePickerDialog.setOnDateSetListener(dateSetListener)
+
+
+                //reminderDate.value = date.value.toString()
+
+
                 Text(text="Selected time: ${date.value}")
                 Spacer(modifier = Modifier.size(16.dp))
                 Button(
@@ -119,26 +137,37 @@ fun Reminder(
                  *
                  * Time picker
                  */
-                //val calendar = Calendar.getInstance()
+
                 val hour = calendar[Calendar.HOUR_OF_DAY]
                 val minute = calendar[Calendar.MINUTE]
 
                 val time = remember{ mutableStateOf("")}
 
+
+
+                val timeSetListener = object : TimePickerDialog.OnTimeSetListener {
+                    override fun onTimeSet(view: TimePicker, hour: Int, minute: Int) {
+                        calendar.set(Calendar.HOUR_OF_DAY, hour)
+                        calendar.set(Calendar.MINUTE, minute)
+
+                    }
+                }
+
+
                 val timePickerDialog = TimePickerDialog(
                     context,
-                    {_, hour : Int, minute : Int ->
-                        time.value = "$hour:$minute"
+                    timeSetListener, hour, minute, true
 
-                    }, hour, minute, true
                 )
-                reminderTime.value = time.value.toString()
+
+
 
                 Text(text="Selected time: ${time.value}")
 
                 Spacer(modifier = Modifier.size(16.dp))
                 Button(
                     onClick = {
+
                         timePickerDialog.show()
                     }) {
                     Text(text="Open time-picker")
@@ -153,13 +182,19 @@ fun Reminder(
                 Button(
                     enabled = true,
                     onClick = {
+                        //calTest.value = (hour + minute + year + month + day).toString()
+                        val xyz = calendar.timeInMillis.toString();
+
+
+
+
                         coroutineScope.launch {
                             viewModel.saveReminder(
                                 com.example.reminderapp.data.entity.Reminder(
                                     reminderMessage = message.value,
-                                    reminderTime = reminderTime.value,
+                                    reminderTime = calendar.timeInMillis,
                                     reminderSeen = false,
-                                    reminderDate = reminderDate.value
+                                    creationTime = Calendar.getInstance().timeInMillis
                                 )
                             )
                         }
@@ -172,8 +207,10 @@ fun Reminder(
                     Text(calendar.timeInMillis.toString())
                 }
 
-                Text(calendar.timeInMillis.toString())
             }
         }
     }
 }
+
+
+

@@ -16,7 +16,7 @@ class ReminderRepository(
         }
     }
 
-    suspend fun updateTest(message: String, time: String, id: Long ){
+    suspend fun updateTest(message: String, time: Long, id: Long ){
         return reminderDao.updateTest(message,time, id)
     }
 

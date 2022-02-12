@@ -7,6 +7,7 @@ import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.data.repository.ReminderRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 
 class HomeViewModel(
     private val reminderRepository: ReminderRepository = Graph.reimderRepository
@@ -37,10 +38,10 @@ class HomeViewModel(
 
     private fun loadRemindersFromDb(){
         val list = mutableListOf(
-            Reminder(reminderMessage = "Test1",reminderTime = "23",reminderSeen = false,reminderDate = "23"),
-            Reminder(reminderMessage = "Test2",reminderTime = "24",reminderSeen = false,reminderDate = "23"),
-            Reminder(reminderMessage = "Test3",reminderTime = "43",reminderSeen = false,reminderDate = "23"),
-            Reminder(reminderMessage = "Test4",reminderTime = "55",reminderSeen = false,reminderDate = "23")
+            Reminder(reminderMessage = "Test1",reminderTime = 23,reminderSeen = false,creationTime = Calendar.getInstance().timeInMillis),
+            Reminder(reminderMessage = "Test2",reminderTime = 45,reminderSeen = false,creationTime = Calendar.getInstance().timeInMillis),
+            Reminder(reminderMessage = "Test3",reminderTime = 45,reminderSeen = false,creationTime = Calendar.getInstance().timeInMillis),
+            Reminder(reminderMessage = "Test4",reminderTime = 66,reminderSeen = false,creationTime = Calendar.getInstance().timeInMillis)
         )
         viewModelScope.launch {
             list.forEach{reminder -> reminderRepository.addReminder(reminder)}

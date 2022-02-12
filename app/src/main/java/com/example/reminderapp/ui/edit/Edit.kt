@@ -90,6 +90,8 @@ fun Edit(
                  * Time picker
                  */
                 val calendar = Calendar.getInstance()
+
+
                 val hour = calendar[Calendar.HOUR_OF_DAY]
                 val minute = calendar[Calendar.MINUTE]
 
@@ -163,7 +165,7 @@ fun Edit(
                             if(newMessage.value == ""){
 
                             }
-                            viewModel.updateTest(newMessage.value,newTime.value,selectedReminder)
+                            viewModel.updateTest(newMessage.value,calendar.timeInMillis,selectedReminder)
 
                         }
                         onBackPress()
@@ -244,6 +246,7 @@ fun ShowDatePicker(context: Context){
 
         }, year, month, day
     )
+
 
         Text(text="Selected time: ${date.value}")
         Spacer(modifier = Modifier.size(16.dp))
