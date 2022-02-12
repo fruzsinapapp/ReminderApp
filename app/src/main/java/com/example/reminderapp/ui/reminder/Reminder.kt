@@ -148,13 +148,6 @@ fun Reminder(
 
 
 
-
-
-
-
-
-
-
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Button(
@@ -176,8 +169,10 @@ fun Reminder(
                         .fillMaxWidth()
                         .size(55.dp)
                 ){
-                    Text("Save reminder")
+                    Text(calendar.timeInMillis.toString())
                 }
+
+                Text(calendar.timeInMillis.toString())
             }
         }
     }

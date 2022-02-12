@@ -160,6 +160,9 @@ fun Edit(
                     enabled = true,
                     onClick = {
                         coroutineScope.launch {
+                            if(newMessage.value == ""){
+
+                            }
                             viewModel.updateTest(newMessage.value,newTime.value,selectedReminder)
 
                         }
