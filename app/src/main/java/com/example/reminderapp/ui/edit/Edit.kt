@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -87,62 +88,32 @@ fun Edit(
 
                 /**
                  *
-                 * Time picker
-                 */
-                val calendar = Calendar.getInstance()
-
-
-                val hour = calendar[Calendar.HOUR_OF_DAY]
-                val minute = calendar[Calendar.MINUTE]
-
-                val time = remember{ mutableStateOf("")}
-
-                val timePickerDialog = TimePickerDialog(
-                    context,
-                    {_, hour : Int, minute : Int ->
-                        time.value = "$hour:$minute"
-
-                    }, hour, minute, true
-                )
-                newTime.value = time.value.toString()
-
-                Text(text="Selected time: ${time.value}")
-
-                Spacer(modifier = Modifier.size(16.dp))
-                Button(
-                    onClick = {
-                        timePickerDialog.show()
-                    }) {
-                    Text(text="Open picker")
-                }
-                Spacer(modifier = Modifier.size(20.dp))
-
-
-
-                /**
-                 *
                  * Date picker
                  */
                 val year: Int
                 val month: Int
                 val day: Int
 
-                //val calendar = Calendar.getInstance()
+                val calendar = Calendar.getInstance()
 
                 year = calendar.get(Calendar.YEAR)
                 month = calendar.get(Calendar.MONTH)
                 day = calendar.get(Calendar.DAY_OF_MONTH)
 
+                val date= remember{ mutableStateOf("")}
 
-
+                val dateSetListener = object : DatePickerDialog.OnDateSetListener {
+                    override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
+                                           dayOfMonth: Int) {
+                        calendar.set(Calendar.YEAR, year)
+                        calendar.set(Calendar.MONTH, monthOfYear)
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    }
+                }
 
                 val datePickerDialog = DatePickerDialog(
                     context,
-                    { _: DatePicker, year : Int, month  : Int, dayOfMonth : Int->
-                        val monthCorr = month+1
-                        date.value = "$dayOfMonth.$monthCorr.$year"
-
-                    }, year, month, day
+                    dateSetListener, year, month, day
                 )
 
                 Text(text="Selected time: ${date.value}")
@@ -151,12 +122,41 @@ fun Edit(
                     onClick = {
                         datePickerDialog.show()
                     }) {
-                    Text(text="Open picker")
+                    Text(text="Open date-picker")
                 }
 
+                /**
+                 * Time picker
+                 */
+
+                val hour = calendar[Calendar.HOUR_OF_DAY]
+                val minute = calendar[Calendar.MINUTE]
+
+                val time = remember{ mutableStateOf("")}
 
 
-                Spacer(modifier = Modifier.height(10.dp))
+                val timeSetListener = object : TimePickerDialog.OnTimeSetListener {
+                    override fun onTimeSet(view: TimePicker, hour: Int, minute: Int) {
+                        calendar.set(Calendar.HOUR_OF_DAY, hour)
+                        calendar.set(Calendar.MINUTE, minute)
+                    }
+                }
+
+                val timePickerDialog = TimePickerDialog(
+                    context,
+                    timeSetListener, hour, minute, true
+                )
+
+
+                Spacer(modifier = Modifier.size(16.dp))
+                Button(
+                    onClick = {
+
+                        timePickerDialog.show()
+                    }) {
+                    Text(text="Open time-picker")
+                }
+                Spacer(modifier = Modifier.size(16.dp))
 
                 Button(
                     enabled = true,

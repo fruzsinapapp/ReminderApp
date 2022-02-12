@@ -17,22 +17,10 @@ data class Reminder(
     @ColumnInfo(name = "reminder_message") val reminderMessage: String,
     @ColumnInfo(name = "reminder_time") val reminderTime: Long,
     @ColumnInfo(name = "reminder_seen") val reminderSeen: Boolean,
-    @ColumnInfo(name = "creation_time") val creationTime: Long
+    @ColumnInfo(name = "creation_time") val creationTime: Long,
+    @ColumnInfo(name = "Location_x") val locationX: Long = 0,
+    @ColumnInfo(name = "location_y") val locationY: Long = 0,
+    @ColumnInfo(name = "creator_id") val creatorId: Long =0
 )
 
-
-
-/*
-data class Reminder(
-    val reminderId: Long,
-    val reminderTitle: String,
-    val reminderDate: Date?
-)
- */
-
-
-
-
-
-
-    //Message, location_x, location_y, reminder_time, creation_time, creator_id, reminder_seen
+    // location_x, , creator_id,

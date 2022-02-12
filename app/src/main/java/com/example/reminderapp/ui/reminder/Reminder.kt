@@ -65,16 +65,6 @@ fun Reminder(
                 }
                 Text(text = "Main page")
             }
-            /*
-            Image(
-                modifier = Modifier,
-                painter = painterResource(R.drawable.background1),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-            Text(text="Create a new reminder")
-
-             */
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -118,11 +108,6 @@ fun Reminder(
                     context,
                     dateSetListener, year, month, day
                 )
-                //datePickerDialog.setOnDateSetListener(dateSetListener)
-
-
-                //reminderDate.value = date.value.toString()
-
 
                 Text(text="Selected time: ${date.value}")
                 Spacer(modifier = Modifier.size(16.dp))
@@ -134,7 +119,6 @@ fun Reminder(
                 }
 
                 /**
-                 *
                  * Time picker
                  */
 
@@ -153,13 +137,10 @@ fun Reminder(
                     }
                 }
 
-
                 val timePickerDialog = TimePickerDialog(
                     context,
                     timeSetListener, hour, minute, true
-
                 )
-
 
 
                 Text(text="Selected time: ${time.value}")
@@ -174,20 +155,9 @@ fun Reminder(
                 }
                 Spacer(modifier = Modifier.size(20.dp))
 
-
-
-
-                Spacer(modifier = Modifier.height(10.dp))
-
                 Button(
                     enabled = true,
                     onClick = {
-                        //calTest.value = (hour + minute + year + month + day).toString()
-                        val xyz = calendar.timeInMillis.toString();
-
-
-
-
                         coroutineScope.launch {
                             viewModel.saveReminder(
                                 com.example.reminderapp.data.entity.Reminder(
