@@ -82,13 +82,11 @@ fun Edit(
                     label = { Text(text = "New reminder message")},
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(10.dp))
-                //Text(newtime.toString())
 
-
-                //ShowTimePicker(context = context)
-
-
+                /**
+                 *
+                 * Time picker
+                 */
                 val calendar = Calendar.getInstance()
                 val hour = calendar[Calendar.HOUR_OF_DAY]
                 val minute = calendar[Calendar.MINUTE]
@@ -102,7 +100,6 @@ fun Edit(
 
                     }, hour, minute, true
                 )
-                //::::::::::::::
                 newTime.value = time.value.toString()
 
                 Text(text="Selected time: ${time.value}")
@@ -125,12 +122,42 @@ fun Edit(
 
 
 
+                /**
+                 *
+                 * Date picker
+                 */
+                val year: Int
+                val month: Int
+                val day: Int
+
+                //val calendar = Calendar.getInstance()
+
+                year = calendar.get(Calendar.YEAR)
+                month = calendar.get(Calendar.MONTH)
+                day = calendar.get(Calendar.DAY_OF_MONTH)
+
+                val date= remember{ mutableStateOf("")}
 
 
+                val datePickerDialog = DatePickerDialog(
+                    context,
+                    { _: DatePicker, year : Int, month  : Int, dayOfMonth : Int->
+                        val monthCorr = month+1
+                        date.value = "$dayOfMonth.$monthCorr.$year"
+
+                    }, year, month, day
+                )
+
+                Text(text="Selected time: ${date.value}")
+                Spacer(modifier = Modifier.size(16.dp))
+                Button(
+                    onClick = {
+                        datePickerDialog.show()
+                    }) {
+                    Text(text="Open picker")
+                }
 
 
-                Spacer(modifier = Modifier.height(20.dp))
-                ShowDatePicker(context = context)
 
 
                 Spacer(modifier = Modifier.height(10.dp))
