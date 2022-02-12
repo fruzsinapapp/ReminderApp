@@ -31,6 +31,7 @@ fun Reminder(
 
     val message = rememberSaveable { mutableStateOf("") }
     val reminderTime = rememberSaveable { mutableStateOf("") }
+    val reminderDate = rememberSaveable { mutableStateOf("") }
     val creatorId = rememberSaveable { mutableStateOf("") }
 
     Surface {
@@ -91,7 +92,8 @@ fun Reminder(
                                 com.example.reminderapp.data.entity.Reminder(
                                     reminderMessage = message.value,
                                     reminderTime = reminderTime.value,
-                                    reminderSeen = false
+                                    reminderSeen = false,
+                                    reminderDate = "2"
                                 )
                             )
                         }
