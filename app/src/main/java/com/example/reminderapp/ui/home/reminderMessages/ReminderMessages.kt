@@ -129,7 +129,7 @@ fun ReminderMessages(
 
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderMessage, reminderTime, icon1, icon2) = createRefs()
+        val (divider, reminderMessage, reminderDate, reminderTime, icon1, icon2) = createRefs()
         Divider(
             Modifier.constrainAs(divider){
                 top.linkTo(parent.top)
@@ -143,10 +143,9 @@ fun ReminderMessages(
         //Edit(reminderId = 2,modifier = modifier)
 
 
-        //title
+        //message
         Text(
 
-            //text = reminder.reminderTitle,
             text = reminder.reminderMessage,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
@@ -165,13 +164,31 @@ fun ReminderMessages(
 
         // date
         Text(
+
+            text=reminder.reminderDate.toString(),
+            maxLines = 1,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.constrainAs(reminderDate) {
+                linkTo(
+                    start = reminderMessage.end,
+                    end = icon1.start,
+                    startMargin = 8.dp,
+                    endMargin = 16.dp,
+                    bias = 0f // float this towards the start. this was is the fix we needed
+                )
+                top.linkTo(parent.top, 10.dp)
+                //bottom.linkTo(parent.bottom, 10.dp)
+            }
+        )
+        // time
+        Text(
             //text = reminder.reminderTime.toString(),
             text=reminder.reminderTime.toString(),
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderTime) {
                 linkTo(
-                    start = reminderMessage.end,
+                    start = reminderDate.end,
                     end = icon1.start,
                     startMargin = 8.dp,
                     endMargin = 16.dp,
