@@ -1,5 +1,6 @@
 package com.example.reminderapp.ui.reminder
 
+import android.app.TimePickerDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -26,6 +28,7 @@ fun Reminder(
     onBackPress: () -> Unit,
     viewModel: ReminderViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -75,12 +78,63 @@ fun Reminder(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
+
+                /*
                 OutlinedTextField(
                     value = reminderTime.value,
                     onValueChange = { reminderTime.value = it },
                     label = { Text(text = "Reminder time")},
                     modifier = Modifier.fillMaxWidth()
                 )
+                
+                 */
+
+
+
+
+
+
+
+
+                /**
+                 *
+                 * Time picker
+                 */
+                val calendar = Calendar.getInstance()
+                val hour = calendar[Calendar.HOUR_OF_DAY]
+                val minute = calendar[Calendar.MINUTE]
+
+                val time = remember{ mutableStateOf("")}
+
+                val timePickerDialog = TimePickerDialog(
+                    context,
+                    {_, hour : Int, minute : Int ->
+                        time.value = "$hour:$minute"
+
+                    }, hour, minute, true
+                )
+                reminderTime.value = time.value.toString()
+
+                Text(text="Selected time: ${time.value}")
+
+                Spacer(modifier = Modifier.size(16.dp))
+                Button(
+                    onClick = {
+                        timePickerDialog.show()
+                    }) {
+                    Text(text="Open picker")
+                }
+                Spacer(modifier = Modifier.size(20.dp))
+
+
+
+
+
+
+
+
+
+
 
                 Spacer(modifier = Modifier.height(10.dp))
 
