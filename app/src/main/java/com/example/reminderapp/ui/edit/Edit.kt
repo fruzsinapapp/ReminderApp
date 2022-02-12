@@ -86,12 +86,53 @@ fun Edit(
                 //Text(newtime.toString())
 
 
-                ShowTimePicker(context = context)
+                //ShowTimePicker(context = context)
+
+
+                val calendar = Calendar.getInstance()
+                val hour = calendar[Calendar.HOUR_OF_DAY]
+                val minute = calendar[Calendar.MINUTE]
+
+                val time = remember{ mutableStateOf("")}
+
+                val timePickerDialog = TimePickerDialog(
+                    context,
+                    {_, hour : Int, minute : Int ->
+                        time.value = "$hour:$minute"
+
+                    }, hour, minute, true
+                )
+                //::::::::::::::
+                newTime.value = time.value.toString()
+
+                Text(text="Selected time: ${time.value}")
+
+                Spacer(modifier = Modifier.size(16.dp))
+                Button(
+                    onClick = {
+                        timePickerDialog.show()
+                    }) {
+                    Text(text="Open picker")
+                }
+                Spacer(modifier = Modifier.size(20.dp))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 Spacer(modifier = Modifier.height(20.dp))
                 ShowDatePicker(context = context)
 
-                
+
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Button(
@@ -134,10 +175,11 @@ fun ShowTimePicker(context: Context){
 
         }, hour, minute, true
     )
-    val dateTest = time.value.toString()
+    //::::::::::::::
+    val newTimeTest = time.value.toString()
 
         Text(text="Selected time: ${time.value}")
-        Text(dateTest)
+
         Spacer(modifier = Modifier.size(16.dp))
         Button(
             onClick = {

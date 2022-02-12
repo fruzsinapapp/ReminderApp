@@ -166,7 +166,7 @@ fun ReminderMessages(
         // date
         Text(
             //text = reminder.reminderTime.toString(),
-            text=reminder.reminderSeen.toString(),
+            text=reminder.reminderTime.toString(),
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderTime) {
