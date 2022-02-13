@@ -40,13 +40,9 @@ fun Reminder(
     viewModel: ReminderViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
     val message = rememberSaveable { mutableStateOf("") }
-    val reminderTime = rememberSaveable { mutableStateOf("") }
-    val reminderDate = rememberSaveable { mutableStateOf("") }
-    val creatorId = rememberSaveable { mutableStateOf("") }
 
     Surface {
         Column(
@@ -93,8 +89,6 @@ fun Reminder(
                 month = calendar.get(Calendar.MONTH)
                 day = calendar.get(Calendar.DAY_OF_MONTH)
 
-                val date= remember{ mutableStateOf("")}
-
                 val dateSetListener = object : DatePickerDialog.OnDateSetListener {
                     override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
                                            dayOfMonth: Int) {
@@ -109,8 +103,8 @@ fun Reminder(
                     dateSetListener, year, month, day
                 )
 
-                Text(text="Selected time: ${date.value}")
                 Spacer(modifier = Modifier.size(16.dp))
+
                 Button(
                     onClick = {
                         datePickerDialog.show()
@@ -121,14 +115,8 @@ fun Reminder(
                 /**
                  * Time picker
                  */
-
                 val hour = calendar[Calendar.HOUR_OF_DAY]
                 val minute = calendar[Calendar.MINUTE]
-
-                val time = remember{ mutableStateOf("")}
-
-
-
                 val timeSetListener = object : TimePickerDialog.OnTimeSetListener {
                     override fun onTimeSet(view: TimePicker, hour: Int, minute: Int) {
                         calendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -136,23 +124,20 @@ fun Reminder(
 
                     }
                 }
-
                 val timePickerDialog = TimePickerDialog(
                     context,
                     timeSetListener, hour, minute, true
                 )
 
-
-                Text(text="Selected time: ${time.value}")
-
                 Spacer(modifier = Modifier.size(16.dp))
+
                 Button(
                     onClick = {
-
                         timePickerDialog.show()
                     }) {
                     Text(text="Open time-picker")
                 }
+
                 Spacer(modifier = Modifier.size(20.dp))
 
                 Button(
@@ -174,7 +159,7 @@ fun Reminder(
                         .fillMaxWidth()
                         .size(55.dp)
                 ){
-                    Text(calendar.timeInMillis.toString())
+                    Text("Save reminder")
                 }
 
             }

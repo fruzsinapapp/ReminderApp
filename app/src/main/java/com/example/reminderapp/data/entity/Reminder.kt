@@ -23,4 +23,3 @@ data class Reminder(
     @ColumnInfo(name = "creator_id") val creatorId: Long =0
 )
 
-    // location_x, , creator_id,

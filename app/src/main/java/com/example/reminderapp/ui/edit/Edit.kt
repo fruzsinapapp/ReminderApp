@@ -28,7 +28,6 @@ import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
 import java.util.*
 
-
 @Composable
 fun Edit(
     navController: NavController,
@@ -42,16 +41,10 @@ fun Edit(
         key = "edit",
         factory = viewModelProviderFactoryOf{ EditViewModel(selectedReminder) }
     )
-    val viewState by viewModel.state.collectAsState()
+
     val coroutineScope = rememberCoroutineScope()
-
     val newMessage = remember { mutableStateOf("") }
-    val newTime = remember { mutableStateOf("") }
-    val date= remember{ mutableStateOf("")}
-
     val context = LocalContext.current
-
-
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -72,7 +65,6 @@ fun Edit(
                 }
                 Text(text = "Main page")
             }
-
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -100,7 +92,6 @@ fun Edit(
                 month = calendar.get(Calendar.MONTH)
                 day = calendar.get(Calendar.DAY_OF_MONTH)
 
-                val date= remember{ mutableStateOf("")}
 
                 val dateSetListener = object : DatePickerDialog.OnDateSetListener {
                     override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
@@ -116,8 +107,8 @@ fun Edit(
                     dateSetListener, year, month, day
                 )
 
-                Text(text="Selected time: ${date.value}")
                 Spacer(modifier = Modifier.size(16.dp))
+
                 Button(
                     onClick = {
                         datePickerDialog.show()
@@ -132,9 +123,6 @@ fun Edit(
                 val hour = calendar[Calendar.HOUR_OF_DAY]
                 val minute = calendar[Calendar.MINUTE]
 
-                val time = remember{ mutableStateOf("")}
-
-
                 val timeSetListener = object : TimePickerDialog.OnTimeSetListener {
                     override fun onTimeSet(view: TimePicker, hour: Int, minute: Int) {
                         calendar.set(Calendar.HOUR_OF_DAY, hour)
@@ -147,8 +135,8 @@ fun Edit(
                     timeSetListener, hour, minute, true
                 )
 
-
                 Spacer(modifier = Modifier.size(16.dp))
+
                 Button(
                     onClick = {
 
@@ -156,17 +144,14 @@ fun Edit(
                     }) {
                     Text(text="Open time-picker")
                 }
+
                 Spacer(modifier = Modifier.size(16.dp))
 
                 Button(
                     enabled = true,
                     onClick = {
                         coroutineScope.launch {
-                            if(newMessage.value == ""){
-
-                            }
                             viewModel.updateTest(newMessage.value,calendar.timeInMillis,selectedReminder)
-
                         }
                         onBackPress()
                     },
@@ -177,15 +162,10 @@ fun Edit(
                     Text("Save reminder")
                 }
             }
-
-
-
         }
     }
 
-
 }
-
 
 /**
  * Not used
@@ -206,9 +186,6 @@ fun ShowTimePicker(context: Context){
 
         }, hour, minute, true
     )
-    //::::::::::::::
-    val newTimeTest = time.value.toString()
-
         Text(text="Selected time: ${time.value}")
 
         Spacer(modifier = Modifier.size(16.dp))
@@ -219,8 +196,6 @@ fun ShowTimePicker(context: Context){
             Text(text="Open picker")
         }
         Spacer(modifier = Modifier.size(20.dp))
-
-
 }
 
 @Composable

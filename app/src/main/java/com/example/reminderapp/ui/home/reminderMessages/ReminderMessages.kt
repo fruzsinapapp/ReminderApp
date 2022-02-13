@@ -38,6 +38,7 @@ import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.ui.edit.Edit
 import com.example.reminderapp.ui.reminder.ReminderViewModel
 import com.example.reminderapp.ui.reminder.ReminderViewState
+import com.google.android.gms.gcm.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -110,7 +111,6 @@ fun ReminderMessages(
     modifier: Modifier = Modifier,
     viewModel: ReminderMessagesViewModel
 ){
-
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
         val (divider, reminderMessage, reminderDate, reminderTime, icon1, icon2) = createRefs()
@@ -203,6 +203,8 @@ fun ReminderMessages(
         }
         IconButton(
             onClick = {
+
+
                 coroutineScope.launch {
                     viewModel.updateSeen(true, reminder.reminderId)
                 }
