@@ -1,9 +1,11 @@
 package com.example.reminderapp.ui.reminder
 
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -27,6 +29,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ReminderViewModel(
@@ -38,6 +41,7 @@ class ReminderViewModel(
         get() = _state
 
     suspend fun saveReminder(reminder: Reminder): Long {
+        setDelayedNotification(reminder)
         return reminderRepository.addReminder(reminder)
     }
 
@@ -51,10 +55,38 @@ class ReminderViewModel(
         }
     }
 }
+
+private fun setDelayedNotification(reminder : Reminder){
+    val workManager = WorkManager.getInstance(Graph.appContext)
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+
+    val timeNow = Calendar.getInstance()
+    val reminderTime = reminder.reminderTime
+    val delay = reminderTime-timeNow.timeInMillis
+
+    val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
+        .setInitialDelay(delay,TimeUnit.MILLISECONDS)
+        .setConstraints(constraints)
+        .build()
+
+    workManager.enqueue(notificationWorker)
+
+    workManager.getWorkInfoByIdLiveData(notificationWorker.id)
+        .observeForever{workinfo ->
+            if (workinfo.state == WorkInfo.State.SUCCEEDED){
+                createSuccessNotification()
+            }else{
+                //createErrorNotification()
+            }
+        }
+}
 private fun setOneTimeNotification(){
     val workManager = WorkManager.getInstance(Graph.appContext)
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
+
         .build()
 
     val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
@@ -67,7 +99,7 @@ private fun setOneTimeNotification(){
     workManager.getWorkInfoByIdLiveData(notificationWorker.id)
         .observeForever{workinfo ->
             if (workinfo.state == WorkInfo.State.SUCCEEDED){
-                createSuccessNotification()
+                //createSuccessNotification()
             }else{
                 //createErrorNotification()
             }
@@ -101,6 +133,25 @@ private fun createSuccessNotification(){
     }
 
 }
+
+
+/*
+private fun createReminderNotification(reminder: Reminder){
+    val notificationId = 2
+    val builder = NotificationCompat.Builder(Graph.appContext,"CHANNEL_ID")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("Reminder created")
+        .setContentText("You created a reminder")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    with(NotificationManagerCompat.from(Graph.appContext)){
+        notify(notificationId, builder.build())
+    }
+}
+ */
+
+
+
+
 
 
 data class ReminderViewState(

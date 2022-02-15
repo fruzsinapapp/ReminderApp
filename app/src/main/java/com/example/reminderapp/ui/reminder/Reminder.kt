@@ -2,6 +2,7 @@ package com.example.reminderapp.ui.reminder
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Build
 import android.widget.DatePicker
 import androidx.compose.foundation.Image
@@ -154,6 +155,7 @@ fun Reminder(
                             )
                         }
                         onBackPress()
+
                     },
                     modifier = Modifier
                         .fillMaxWidth()

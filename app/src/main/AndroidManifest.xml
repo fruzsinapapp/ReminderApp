@@ -3,8 +3,6 @@
     package="com.example.reminderapp" >
 
 
-
-
     
     <application
         android:name=".ReminderApplication"
@@ -15,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ReminderApp">
         //android:image="@drawable/background1"
+
+
 
         <activity
             android:name=".ui.MainActivity"
