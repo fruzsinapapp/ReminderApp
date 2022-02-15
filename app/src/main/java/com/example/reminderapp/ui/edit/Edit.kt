@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.room.ColumnInfo
 import com.example.reminderapp.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
@@ -151,7 +152,26 @@ fun Edit(
                     enabled = true,
                     onClick = {
                         coroutineScope.launch {
-                            viewModel.updateTest(newMessage.value,calendar.timeInMillis,selectedReminder)
+
+
+                            //........
+                            val reminder = viewModel.getReminderWithId(reminderId.toLong())
+                            val newReminder = reminder?.copy(
+                                reminderMessage = newMessage.value,
+                                reminderTime = calendar.timeInMillis,
+                                reminderSeen = reminder.reminderSeen,
+                                creationTime = reminder.creationTime,
+                                locationX = 0,
+                                locationY = 0,
+                                creatorId = 0
+                                    )
+
+
+                            if (newReminder != null) {
+                                viewModel.updateReminder(newReminder)
+                            }
+                            //.........
+                            //viewModel.updateTest(newMessage.value,calendar.timeInMillis,selectedReminder)
                         }
                         onBackPress()
                     },
