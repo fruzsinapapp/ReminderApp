@@ -28,6 +28,7 @@ import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.ui.home.reminderMessages.ReminderMessages
 import com.google.accompanist.insets.systemBarsPadding
+import java.util.*
 
 @Composable
 fun Home(
@@ -37,7 +38,6 @@ fun Home(
 
     val viewState by viewModel .state.collectAsState()
 
-    //val selectedReminder = viewState.selectedReminder
 
     if(viewState.reminders.isNotEmpty()){
         Surface(modifier = Modifier.fillMaxSize()){
@@ -77,25 +77,18 @@ fun HomeContent(
                 .fillMaxWidth()
         ){
             val appBarColor = MaterialTheme.colors.secondary.copy(alpha = 0.80f)
+            val calendar = Calendar.getInstance()
+            val currentTime = calendar.timeInMillis
 
             HomeAppBar(
                 backgroundColor = appBarColor,
                 navController = navController)
 
-            /*
-            ReminderList(
-                reminders = reminders
-            )
-             */
-
             ReminderMessages(
+                //currentTime = currentTime,
                 modifier = Modifier.fillMaxSize(),
                 navController = navController
             )
-
-                Text(text="Test")
-
-
         }
 
     }
@@ -103,84 +96,6 @@ fun HomeContent(
 
 }
 
-/*
-@Composable
-private fun ReminderList(
-    reminders: List<Reminder>
-){
-    LazyColumn(
-        contentPadding = PaddingValues(0.dp),
-        verticalArrangement = Arrangement.Center
-    ){
-        items(reminders) {item ->
-            ReminderListItem(
-                reminder = item,
-                onClick={},
-                modifier = Modifier.fillParentMaxWidth()
-            )
-        }
-    }
-}
-
-@Composable
-private fun ReminderListItem(
-    reminder: Reminder,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-){
-    ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderMessage, reminderTime) = createRefs()
-        Divider(
-            Modifier.constrainAs(divider){
-                top.linkTo(parent.top)
-                centerHorizontallyTo(parent)
-                width = Dimension.fillToConstraints
-            }
-        )
-
-        //title
-        Text(
-
-            //text = reminder.reminderTitle,
-            text = reminder.reminderMessage,
-            maxLines = 1,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.constrainAs(reminderMessage) {
-                linkTo(
-                    start = parent.start,
-                    end = parent.end,
-                    startMargin = 24.dp,
-                    endMargin = 16.dp,
-                    bias = 0f
-                )
-                top.linkTo(parent.top, margin = 10.dp)
-                width = Dimension.preferredWrapContent
-            }
-        )
-
-        // date
-        Text(
-            //text = reminder.reminderTime.toString(),
-            text="",
-            maxLines = 1,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.constrainAs(reminderTime) {
-                linkTo(
-                    start = reminderMessage.end,
-                    end = reminderMessage.start,
-                    startMargin = 8.dp,
-                    endMargin = 16.dp,
-                    bias = 0f // float this towards the start. this was is the fix we needed
-                )
-                top.linkTo(reminderMessage.bottom, 6.dp)
-                bottom.linkTo(parent.bottom, 10.dp)
-            }
-        )
-
-
-    }
-}
-*/
 
 @Composable
 private  fun HomeAppBar(

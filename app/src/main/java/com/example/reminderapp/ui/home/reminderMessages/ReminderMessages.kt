@@ -50,6 +50,8 @@ import java.util.*
 fun ReminderMessages(
     modifier: Modifier = Modifier,
     navController: NavController,
+
+    //currentTime : Long
 ){
     val viewModel: ReminderMessagesViewModel = viewModel(
         key = "reminder_list",
@@ -59,14 +61,18 @@ fun ReminderMessages(
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    Column(modifier = modifier ) {
-        ReminderList(
-            list = viewState.reminders,
-            coroutineScope = coroutineScope,
-            viewModel = viewModel(),
-            navController = navController
 
-        )
+    Column(modifier = modifier ) {
+
+
+            ReminderList(
+                list = viewState.reminders,
+                coroutineScope = coroutineScope,
+                viewModel = viewModel(),
+                navController = navController
+            )
+
+
     }
 }
 
@@ -83,8 +89,6 @@ fun ReminderMessages(
         contentPadding = PaddingValues(0.dp),
         verticalArrangement = Arrangement.Center
     ){
-
-
         items(list) {item ->
         val reminderId:String = item.reminderId.toString()
 
@@ -113,7 +117,7 @@ fun ReminderMessages(
 ){
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderMessage, reminderDate, reminderTime, icon1, icon2) = createRefs()
+        val (divider, reminderMessage, reminderTime, icon1, icon2) = createRefs()
         Divider(
             Modifier.constrainAs(divider){
                 top.linkTo(parent.top)
@@ -141,26 +145,7 @@ fun ReminderMessages(
             }
         )
 
-/*
-        Text(
 
-            text=reminder.reminderDate.toString(),
-            maxLines = 1,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.constrainAs(reminderDate) {
-                linkTo(
-                    start = reminderMessage.end,
-                    end = icon1.start,
-                    startMargin = 8.dp,
-                    endMargin = 16.dp,
-                    bias = 0f
-                )
-                top.linkTo(parent.top, 10.dp)
-
-            }
-        )
-
- */
         // time
         Text(
 

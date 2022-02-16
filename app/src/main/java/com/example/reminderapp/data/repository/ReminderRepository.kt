@@ -1,5 +1,6 @@
 package com.example.reminderapp.data.repository
 
+import androidx.room.Query
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.data.room.ReminderDao
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +35,8 @@ class ReminderRepository(
 
     //suspend fun addReminder(reminder: Reminder) = reminderDao.insert(reminder)
     fun reminders(): Flow<List<Reminder>> = reminderDao.reminders()
+
+    fun remindersDue(currentTime : Long): Flow<List<Reminder>> = reminderDao.remindersDue(currentTime)
 
 
     suspend fun getReminderWithId(reminderId: Long): Reminder? = reminderDao.getReminderWithId(reminderId)
