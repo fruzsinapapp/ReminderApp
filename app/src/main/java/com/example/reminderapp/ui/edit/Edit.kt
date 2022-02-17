@@ -46,8 +46,8 @@ fun Edit(
 
     val coroutineScope = rememberCoroutineScope()
     val newMessage = remember { mutableStateOf("") }
-    val context = Graph.appContext
-    //val context = LocalContext.current
+    //val context = Graph.appContext
+    val context = LocalContext.current
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -165,7 +165,8 @@ fun Edit(
                                 creationTime = reminder.creationTime,
                                 locationX = 0,
                                 locationY = 0,
-                                creatorId = 0
+                                creatorId = 0,
+                                withNotification = true
                                     )
 
 

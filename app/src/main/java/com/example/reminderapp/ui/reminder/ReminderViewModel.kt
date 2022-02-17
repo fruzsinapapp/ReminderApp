@@ -50,8 +50,12 @@ class ReminderViewModel(
         get() = _state
 
     suspend fun saveReminder(reminder: Reminder): Long {
-        setDelayedNotification(reminder,context)
-        setNotificationBefore(reminder,context)
+
+        if (reminder.withNotification){
+            setDelayedNotification(reminder,context)
+            setNotificationBefore(reminder,context)
+        }
+
         return reminderRepository.addReminder(reminder)
     }
 

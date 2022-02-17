@@ -34,6 +34,10 @@ import android.widget.TimePicker
 import androidx.annotation.RequiresApi
 import com.example.reminderapp.Graph
 
+object WithNotification{
+    const val with = "With notification"
+    const val without = "Without notification"
+}
 
 @RequiresApi(Build.VERSION_CODES.N)
 @Composable
@@ -41,11 +45,13 @@ fun Reminder(
     onBackPress: () -> Unit,
     viewModel: ReminderViewModel = viewModel()
 ) {
-    val context = Graph.appContext
-    //val context = LocalContext.current
+    //val context = Graph.appContext
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     val message = rememberSaveable { mutableStateOf("") }
+    val withOrWithout = remember{ mutableStateOf("")}
+
 
     Surface {
         Column(
@@ -143,6 +149,22 @@ fun Reminder(
 
                 Spacer(modifier = Modifier.size(20.dp))
 
+
+
+                //Radio button
+                Text("Would you like to have a notification for you reminder?")
+                Spacer(modifier = Modifier.size(20.dp))
+                RadioButton(
+                    selected = withOrWithout.value==WithNotification.with,
+                    onClick = {withOrWithout.value = WithNotification.with}
+                )
+                Text("With")
+                Spacer(modifier = Modifier.size(20.dp))
+                RadioButton(
+                    selected = withOrWithout.value==WithNotification.without,
+                    onClick = {withOrWithout.value = WithNotification.without}
+                )
+                Text("Without")
                 Button(
                     enabled = true,
                     onClick = {
@@ -152,7 +174,8 @@ fun Reminder(
                                     reminderMessage = message.value,
                                     reminderTime = calendar.timeInMillis,
                                     reminderSeen = false,
-                                    creationTime = Calendar.getInstance().timeInMillis
+                                    creationTime = Calendar.getInstance().timeInMillis,
+                                    withNotification = true
                                 )
                             )
                         }
