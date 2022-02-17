@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.room.ColumnInfo
+import com.example.reminderapp.Graph
 import com.example.reminderapp.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
@@ -45,7 +46,8 @@ fun Edit(
 
     val coroutineScope = rememberCoroutineScope()
     val newMessage = remember { mutableStateOf("") }
-    val context = LocalContext.current
+    val context = Graph.appContext
+    //val context = LocalContext.current
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(

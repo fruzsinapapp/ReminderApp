@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.reminderapp.Graph
 import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
 
@@ -32,7 +33,8 @@ fun Login(
     Surface(modifier = Modifier.fillMaxSize(), color = Color.LightGray, ) {
         val username= rememberSaveable{mutableStateOf("")}
         val password= rememberSaveable{mutableStateOf("")}
-        val context = LocalContext.current
+        val context = Graph.appContext
+        //val context = LocalContext.current
 
         //val sharedPreferences :SharedPreferences
 

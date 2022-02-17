@@ -20,6 +20,6 @@ data class Reminder(
     @ColumnInfo(name = "creation_time") val creationTime: Long,
     @ColumnInfo(name = "Location_x") val locationX: Long = 0,
     @ColumnInfo(name = "location_y") val locationY: Long = 0,
-    @ColumnInfo(name = "creator_id") val creatorId: Long =0
+    @ColumnInfo(name = "creator_id") val creatorId: Long = 0
 )
 

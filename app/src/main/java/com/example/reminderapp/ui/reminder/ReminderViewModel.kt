@@ -89,7 +89,7 @@ private fun setDelayedNotification(reminder : Reminder,context: Context){
                 //createSuccessNotification()
                 createReminderNotification(reminder,context)
             }else{
-                //createErrorNotification()
+                createFailedNotification()
             }
         }
 }
@@ -177,6 +177,21 @@ private fun createSuccessNotification(){
     }
 }
  */
+
+
+private fun createFailedNotification(){
+    val notificationId = 1
+    val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("Fail!")
+        .setContentText("Notification failed")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+    with(NotificationManagerCompat.from(Graph.appContext)){
+        notify(notificationId,builder.build())
+    }
+}
+
 
 private fun createReminderNotification(
     reminder:Reminder,

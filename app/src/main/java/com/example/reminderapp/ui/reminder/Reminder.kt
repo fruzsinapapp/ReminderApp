@@ -32,6 +32,7 @@ import android.widget.CalendarView
 import android.widget.CalendarView.OnDateChangeListener
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
+import com.example.reminderapp.Graph
 
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -40,7 +41,8 @@ fun Reminder(
     onBackPress: () -> Unit,
     viewModel: ReminderViewModel = viewModel()
 ) {
-    val context = LocalContext.current
+    val context = Graph.appContext
+    //val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     val message = rememberSaveable { mutableStateOf("") }

@@ -34,6 +34,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.reminderapp.Graph
 import com.example.reminderapp.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,7 +51,8 @@ fun Passcode(
     val inputPin = remember { mutableStateListOf<Int>() }
     //val error = remember { mutableStateOf<String>("") }
     //val showSuccess = remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    val context = Graph.appContext
+    //val context = LocalContext.current
 
     Column(
         modifier = Modifier
