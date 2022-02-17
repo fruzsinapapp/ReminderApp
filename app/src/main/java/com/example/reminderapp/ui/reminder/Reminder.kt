@@ -154,17 +154,24 @@ fun Reminder(
                 //Radio button
                 Text("Would you like to have a notification for you reminder?")
                 Spacer(modifier = Modifier.size(20.dp))
-                RadioButton(
-                    selected = withOrWithout.value==WithNotification.with,
-                    onClick = {withOrWithout.value = WithNotification.with}
-                )
-                Text("With")
-                Spacer(modifier = Modifier.size(20.dp))
-                RadioButton(
-                    selected = withOrWithout.value==WithNotification.without,
-                    onClick = {withOrWithout.value = WithNotification.without}
-                )
-                Text("Without")
+                Row{
+
+                    RadioButton(
+                        selected = withOrWithout.value==WithNotification.with,
+                        onClick = {withOrWithout.value = WithNotification.with}
+                    )
+                    Text("With")
+                    Spacer(modifier = Modifier.size(20.dp))
+                    RadioButton(
+                        selected = withOrWithout.value==WithNotification.without,
+                        onClick = {withOrWithout.value = WithNotification.without}
+                    )
+                    Text("Without")
+                }
+
+
+
+
                 Button(
                     enabled = true,
                     onClick = {
@@ -175,7 +182,7 @@ fun Reminder(
                                     reminderTime = calendar.timeInMillis,
                                     reminderSeen = false,
                                     creationTime = Calendar.getInstance().timeInMillis,
-                                    withNotification = true
+                                    withNotification = withOrWithout.value== WithNotification.with
                                 )
                             )
                         }

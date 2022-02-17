@@ -117,7 +117,7 @@ fun ReminderMessages(
 ){
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderMessage, reminderTime, icon1, icon2) = createRefs()
+        val (divider, reminderMessage, reminderTime, icon1, icon2,reminderNot) = createRefs()
         Divider(
             Modifier.constrainAs(divider){
                 top.linkTo(parent.top)
@@ -155,6 +155,21 @@ fun ReminderMessages(
             modifier = Modifier.constrainAs(reminderTime) {
                 linkTo(
                     start = reminderMessage.end,
+                    end = icon1.start,
+                    startMargin = 8.dp,
+                    endMargin = 16.dp,
+                    bias = 0f
+                )
+                top.linkTo(parent.top, 10.dp)
+            }
+        )
+        Text(
+            text=reminder.withNotification.toString(),
+            maxLines = 1,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.constrainAs(reminderNot) {
+                linkTo(
+                    start = reminderTime.end,
                     end = icon1.start,
                     startMargin = 8.dp,
                     endMargin = 16.dp,
