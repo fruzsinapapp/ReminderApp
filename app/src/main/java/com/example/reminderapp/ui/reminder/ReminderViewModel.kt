@@ -4,9 +4,13 @@ package com.example.reminderapp.ui.reminder
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.NotificationManagerCompat.from
@@ -24,6 +28,7 @@ import com.example.reminderapp.Graph
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.data.repository.ReminderRepository
+import com.example.reminderapp.ui.MainActivity
 import com.example.reminderapp.util.NotificationWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,21 +38,26 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ReminderViewModel(
-    private val reminderRepository: ReminderRepository = Graph.reimderRepository
+    private val reminderRepository: ReminderRepository = Graph.reimderRepository,
+
+
+
+
 ): ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
-
+    val context = Graph.appContext
     val state: StateFlow<ReminderViewState>
         get() = _state
 
     suspend fun saveReminder(reminder: Reminder): Long {
-        setDelayedNotification(reminder)
+        setDelayedNotification(reminder,context)
+        setNotificationBefore(reminder,context)
         return reminderRepository.addReminder(reminder)
     }
 
     init {
         createNotificationChannel(context = Graph.appContext)
-        setOneTimeNotification()
+        //setOneTimeNotification()
         viewModelScope.launch {
             reminderRepository.reminders().collect { reminders ->
                 _state.value = ReminderViewState(reminders)
@@ -56,7 +66,7 @@ class ReminderViewModel(
     }
 }
 
-private fun setDelayedNotification(reminder : Reminder){
+private fun setDelayedNotification(reminder : Reminder,context: Context){
     val workManager = WorkManager.getInstance(Graph.appContext)
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -76,12 +86,45 @@ private fun setDelayedNotification(reminder : Reminder){
     workManager.getWorkInfoByIdLiveData(notificationWorker.id)
         .observeForever{workinfo ->
             if (workinfo.state == WorkInfo.State.SUCCEEDED){
-                createSuccessNotification()
+                //createSuccessNotification()
+                createReminderNotification(reminder,context)
             }else{
                 //createErrorNotification()
             }
         }
 }
+
+
+//notification 2 minutes before
+private fun setNotificationBefore(reminder : Reminder,context: Context){
+    val workManager = WorkManager.getInstance(Graph.appContext)
+    val constraints = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+
+    val timeNow = Calendar.getInstance()
+    val reminderTime = reminder.reminderTime
+    val delay = reminderTime-timeNow.timeInMillis-120000
+
+    val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
+        .setInitialDelay(delay,TimeUnit.MILLISECONDS)
+        .setConstraints(constraints)
+        .build()
+
+    workManager.enqueue(notificationWorker)
+
+    workManager.getWorkInfoByIdLiveData(notificationWorker.id)
+        .observeForever{workinfo ->
+            if (workinfo.state == WorkInfo.State.SUCCEEDED){
+                //createSuccessNotification()
+                createReminderNotification(reminder,context)
+            }else{
+                //createErrorNotification()
+            }
+        }
+}
+
+/*
 private fun setOneTimeNotification(){
     val workManager = WorkManager.getInstance(Graph.appContext)
     val constraints = Constraints.Builder()
@@ -105,6 +148,8 @@ private fun setOneTimeNotification(){
             }
         }
 }
+*/
+
 private fun createNotificationChannel(context: Context) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val name = "RemindernotificationChannel"
@@ -118,7 +163,7 @@ private fun createNotificationChannel(context: Context) {
     }
 }
 
-
+/*
 private fun createSuccessNotification(){
     val notificationId = 1
     val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
@@ -129,11 +174,38 @@ private fun createSuccessNotification(){
 
     with(NotificationManagerCompat.from(Graph.appContext)){
         notify(notificationId,builder.build())
+    }
+}
+ */
 
+private fun createReminderNotification(
+    reminder:Reminder,
+    context: Context
+){
+    val notificationId = 2
+
+    val intent = Intent(context, MainActivity::class.java).apply{
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
 
-}
+    val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,intent,0)
 
+    val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+    val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("You have one reminder due")
+        .setContentText("Reminder message:${reminder.reminderMessage}")
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setContentIntent(pendingIntent)
+        .setSound(uri)
+        .setOnlyAlertOnce(true)
+
+    with(NotificationManagerCompat.from(Graph.appContext)){
+        notify(notificationId,builder.build())
+
+    }
+}
 
 /*
 private fun createReminderNotification(reminder: Reminder){
@@ -148,10 +220,6 @@ private fun createReminderNotification(reminder: Reminder){
     }
 }
  */
-
-
-
-
 
 
 data class ReminderViewState(

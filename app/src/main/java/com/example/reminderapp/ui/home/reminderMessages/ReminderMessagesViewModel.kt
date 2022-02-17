@@ -13,11 +13,6 @@ import java.util.*
 
 
 class ReminderMessagesViewModel(
-    //private val selectedReminder: Reminder,
-    //private val currentTime: Long,
-
-
-
 
     private val reminderRepository: ReminderRepository = Graph.reimderRepository,
 
