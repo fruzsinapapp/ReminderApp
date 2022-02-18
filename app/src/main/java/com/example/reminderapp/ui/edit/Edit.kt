@@ -26,9 +26,17 @@ import androidx.room.ColumnInfo
 import com.example.reminderapp.Graph
 import com.example.reminderapp.util.viewModelProviderFactoryOf
 import com.example.reminderapp.R
+import com.example.reminderapp.ui.reminder.WithNotification
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
 import java.util.*
+
+
+object WithNotification{
+    const val with = "With notification"
+    const val without = "Without notification"
+}
+
 
 @Composable
 fun Edit(
@@ -38,6 +46,7 @@ fun Edit(
 
 ) {
     val selectedReminder=reminderId.toLong()
+    val withOrWithout = remember{ mutableStateOf("")}
 
     val viewModel: EditViewModel = viewModel(
         key = "edit",
@@ -81,6 +90,26 @@ fun Edit(
                     modifier = Modifier.fillMaxWidth()
                 )
 
+                Spacer(modifier = Modifier.height(20.dp))
+                //Radio button
+                Text("Would you like to have a notification for you reminder?")
+                Spacer(modifier = Modifier.size(20.dp))
+                Row{
+
+                    RadioButton(
+                        selected = withOrWithout.value== WithNotification.with,
+                        onClick = {withOrWithout.value = WithNotification.with}
+                    )
+                    Text("With")
+                    Spacer(modifier = Modifier.size(20.dp))
+                    RadioButton(
+                        selected = withOrWithout.value== WithNotification.without,
+                        onClick = {withOrWithout.value = WithNotification.without}
+                    )
+                    Text("Without")
+                }
+
+                Spacer(modifier = Modifier.size(20.dp))
                 /**
                  *
                  * Date picker
@@ -166,7 +195,7 @@ fun Edit(
                                 locationX = 0,
                                 locationY = 0,
                                 creatorId = 0,
-                                withNotification = true
+                                withNotification = withOrWithout.value== WithNotification.with
                                     )
 
 

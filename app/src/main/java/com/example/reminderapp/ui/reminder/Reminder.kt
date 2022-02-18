@@ -92,13 +92,13 @@ fun Reminder(
                         selected = withOrWithout.value==WithNotification.with,
                         onClick = {withOrWithout.value = WithNotification.with}
                     )
-                    Text("With")
+                    Text("Yes")
                     Spacer(modifier = Modifier.size(20.dp))
                     RadioButton(
                         selected = withOrWithout.value==WithNotification.without,
                         onClick = {withOrWithout.value = WithNotification.without}
                     )
-                    Text("Without")
+                    Text("No")
                 }
 
                 Spacer(modifier = Modifier.size(20.dp))

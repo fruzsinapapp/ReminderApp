@@ -1,21 +1,15 @@
 package com.example.reminderapp.ui.reminder
 
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Build
-import androidx.compose.runtime.MutableState
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.NotificationManagerCompat.from
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
@@ -23,8 +17,6 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.lifecycle.viewModelScope
-import androidx.work.OneTimeWorkRequestBuilder
 import com.example.reminderapp.Graph
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
@@ -50,13 +42,7 @@ class ReminderViewModel(
 
     suspend fun saveReminder(reminder: Reminder): Long {
         setDelayedNotification(reminder,context)
-
-/*
-        if (reminder.withNotification){
-            setDelayedNotification(reminder,context)
-            //setNotificationBefore(reminder,context)
-        }
- */
+        setNotificationBefore(reminder,context)
 
         return reminderRepository.addReminder(reminder)
     }
@@ -88,18 +74,15 @@ private fun createNotificationChannel(context: Context) {
 
 private fun setDelayedNotification(reminder : Reminder,context: Context){
 
-if(reminder.withNotification){
+    if(reminder.withNotification){
     val workManager = WorkManager.getInstance(Graph.appContext)
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()
 
-    val timeNow = Calendar.getInstance()
     val reminderTime = reminder.reminderTime
-    val delay = reminderTime-timeNow.timeInMillis
-    //val delay = reminder.reminderTime - reminder.creationTime
-
-    //print(delay.toString())
+    val creationTime = reminder.creationTime
+    val delay = reminderTime - creationTime
     val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
         .setInitialDelay(delay,TimeUnit.MILLISECONDS)
         .setConstraints(constraints)
@@ -125,14 +108,16 @@ if(reminder.withNotification){
 
 //notification 2 minutes before
 private fun setNotificationBefore(reminder : Reminder,context: Context){
-    val workManager = WorkManager.getInstance(Graph.appContext)
-    val constraints = Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
 
-    val timeNow = Calendar.getInstance()
-    val reminderTime = reminder.reminderTime
-    val delay = reminderTime-timeNow.timeInMillis-120000
+    if(reminder.withNotification){
+        val workManager = WorkManager.getInstance(Graph.appContext)
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val timeNow = Calendar.getInstance()
+        val reminderTime = reminder.reminderTime
+        val delay = reminderTime-timeNow.timeInMillis-120000
 
         val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
             .setInitialDelay(delay,TimeUnit.MILLISECONDS)
@@ -150,6 +135,8 @@ private fun setNotificationBefore(reminder : Reminder,context: Context){
                     //createErrorNotification()
                 }
             }
+    }
+
 
 
 }
@@ -178,7 +165,7 @@ private fun createReminderNotification(
         .setContentTitle("You have one reminder due")
         .setContentText("Reminder message:${reminder.reminderMessage}")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        .setContentIntent(pendingIntent)
+        //.setContentIntent(pendingIntent)
         .setSound(uri)
         .setOnlyAlertOnce(true)
 
@@ -208,7 +195,7 @@ private fun createReminderNotification2(
         .setContentTitle("You have one reminder due in 2 minutes")
         .setContentText("Reminder message:${reminder.reminderMessage}")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        .setContentIntent(pendingIntent)
+        //.setContentIntent(pendingIntent)
         .setSound(uri)
         .setOnlyAlertOnce(true)
 

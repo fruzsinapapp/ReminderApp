@@ -12,9 +12,11 @@ class NotificationWorker(
 
     override fun doWork(): Result {
         return try {
+            /*
             for(i in 0..10){
                 Log.i("NotificationWorker", "Counted $i")
             }
+             */
             Result.success()
         } catch (e:Exception){
             Result.failure()

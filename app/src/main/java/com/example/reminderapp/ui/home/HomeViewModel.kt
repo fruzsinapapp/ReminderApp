@@ -32,7 +32,7 @@ class HomeViewModel(
 
 
         }
-        loadRemindersFromDb()
+        //loadRemindersFromDb()
     }
 
 
