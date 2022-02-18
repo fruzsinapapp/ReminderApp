@@ -49,11 +49,14 @@ class ReminderViewModel(
         get() = _state
 
     suspend fun saveReminder(reminder: Reminder): Long {
+        setDelayedNotification(reminder,context)
 
+/*
         if (reminder.withNotification){
             setDelayedNotification(reminder,context)
             //setNotificationBefore(reminder,context)
         }
+ */
 
         return reminderRepository.addReminder(reminder)
     }
@@ -69,7 +72,23 @@ class ReminderViewModel(
     }
 }
 
+
+private fun createNotificationChannel(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val name = "RemindernotificationChannel"
+        val descriptionText = "ReminderNotificationChannelDescriptionText"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
+            description = descriptionText
+        }
+        val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+}
+
 private fun setDelayedNotification(reminder : Reminder,context: Context){
+
+if(reminder.withNotification){
     val workManager = WorkManager.getInstance(Graph.appContext)
     val constraints = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -77,26 +96,28 @@ private fun setDelayedNotification(reminder : Reminder,context: Context){
 
     val timeNow = Calendar.getInstance()
     val reminderTime = reminder.reminderTime
-    //val delay = reminderTime-timeNow.timeInMillis
-    val delay = reminder.reminderTime - reminder.creationTime
+    val delay = reminderTime-timeNow.timeInMillis
+    //val delay = reminder.reminderTime - reminder.creationTime
 
     //print(delay.toString())
-        val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(delay,TimeUnit.SECONDS)
-            .setConstraints(constraints)
-            .build()
+    val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
+        .setInitialDelay(delay,TimeUnit.MILLISECONDS)
+        .setConstraints(constraints)
+        .build()
 
-        workManager.enqueue(notificationWorker)
+    workManager.enqueue(notificationWorker)
 
-        workManager.getWorkInfoByIdLiveData(notificationWorker.id)
-            .observeForever{workinfo ->
-                if (workinfo.state == WorkInfo.State.SUCCEEDED){
-                    //createSuccessNotification()
-                    createReminderNotification(reminder)//context)
-                }else{
-                   //createFailedNotification()
-                }
+    workManager.getWorkInfoByIdLiveData(notificationWorker.id)
+        .observeForever{workinfo ->
+            if (workinfo.state == WorkInfo.State.SUCCEEDED){
+                //createSuccessNotification()
+                createReminderNotification(reminder, context)
+            }else{
+                //createFailedNotification()
             }
+        }
+}
+
 
 
 }
@@ -135,43 +156,30 @@ private fun setNotificationBefore(reminder : Reminder,context: Context){
 
 
 
-private fun createNotificationChannel(context: Context) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val name = "RemindernotificationChannel"
-        val descriptionText = "ReminderNotificationChannelDescriptionText"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
-            description = descriptionText
-        }
-        val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-}
+
 
 
 private fun createReminderNotification(
     reminder:Reminder,
-    //context: Context
+    context: Context
 ){
     val notificationId = 2
 
+    val intent = Intent(context, MainActivity::class.java).apply{
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    }
 
+    val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,intent,0)
 
-    //val intent = Intent(context, MainActivity::class.java).apply{
-    //    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-    //}
-
-    //val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,intent,0)
-
-    //val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+    val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
     val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
         .setSmallIcon(R.drawable.ic_launcher_background)
         .setContentTitle("You have one reminder due")
         .setContentText("Reminder message:${reminder.reminderMessage}")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        //.setContentIntent(pendingIntent)
-        //.setSound(uri)
+        .setContentIntent(pendingIntent)
+        .setSound(uri)
         .setOnlyAlertOnce(true)
 
     with(NotificationManagerCompat.from(Graph.appContext)){

@@ -83,6 +83,25 @@ fun Reminder(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(20.dp))
+                //Radio button
+                Text("Would you like to have a notification for you reminder?")
+                Spacer(modifier = Modifier.size(20.dp))
+                Row{
+
+                    RadioButton(
+                        selected = withOrWithout.value==WithNotification.with,
+                        onClick = {withOrWithout.value = WithNotification.with}
+                    )
+                    Text("With")
+                    Spacer(modifier = Modifier.size(20.dp))
+                    RadioButton(
+                        selected = withOrWithout.value==WithNotification.without,
+                        onClick = {withOrWithout.value = WithNotification.without}
+                    )
+                    Text("Without")
+                }
+
+                Spacer(modifier = Modifier.size(20.dp))
 
                 /**
                  *
@@ -151,25 +170,7 @@ fun Reminder(
 
 
 
-                //Radio button
-                Text("Would you like to have a notification for you reminder?")
-                Spacer(modifier = Modifier.size(20.dp))
-                Row{
 
-                    RadioButton(
-                        selected = withOrWithout.value==WithNotification.with,
-                        onClick = {withOrWithout.value = WithNotification.with}
-                    )
-                    Text("With")
-                    Spacer(modifier = Modifier.size(20.dp))
-                    RadioButton(
-                        selected = withOrWithout.value==WithNotification.without,
-                        onClick = {withOrWithout.value = WithNotification.without}
-                    )
-                    Text("Without")
-                }
-
-                Spacer(modifier = Modifier.size(20.dp))
 
 
                 Button(
