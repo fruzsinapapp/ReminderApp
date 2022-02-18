@@ -42,21 +42,17 @@ class ReminderViewModel(
     private val reminderRepository: ReminderRepository = Graph.reimderRepository,
 
 
-
-
 ): ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
     val context = Graph.appContext
     val state: StateFlow<ReminderViewState>
         get() = _state
 
-
-
     suspend fun saveReminder(reminder: Reminder): Long {
 
         if (reminder.withNotification){
             setDelayedNotification(reminder,context)
-            setNotificationBefore(reminder,context)
+            //setNotificationBefore(reminder,context)
         }
 
         return reminderRepository.addReminder(reminder)
@@ -81,24 +77,28 @@ private fun setDelayedNotification(reminder : Reminder,context: Context){
 
     val timeNow = Calendar.getInstance()
     val reminderTime = reminder.reminderTime
-    val delay = reminderTime-timeNow.timeInMillis
+    //val delay = reminderTime-timeNow.timeInMillis
+    val delay = reminder.reminderTime - reminder.creationTime
 
-    val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
-        .setInitialDelay(delay,TimeUnit.MILLISECONDS)
-        .setConstraints(constraints)
-        .build()
+    //print(delay.toString())
+        val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .setInitialDelay(delay,TimeUnit.SECONDS)
+            .setConstraints(constraints)
+            .build()
 
-    workManager.enqueue(notificationWorker)
+        workManager.enqueue(notificationWorker)
 
-    workManager.getWorkInfoByIdLiveData(notificationWorker.id)
-        .observeForever{workinfo ->
-            if (workinfo.state == WorkInfo.State.SUCCEEDED){
-                //createSuccessNotification()
-                createReminderNotification(reminder,context)
-            }else{
-                createFailedNotification()
+        workManager.getWorkInfoByIdLiveData(notificationWorker.id)
+            .observeForever{workinfo ->
+                if (workinfo.state == WorkInfo.State.SUCCEEDED){
+                    //createSuccessNotification()
+                    createReminderNotification(reminder)//context)
+                }else{
+                   //createFailedNotification()
+                }
             }
-        }
+
+
 }
 
 
@@ -113,23 +113,140 @@ private fun setNotificationBefore(reminder : Reminder,context: Context){
     val reminderTime = reminder.reminderTime
     val delay = reminderTime-timeNow.timeInMillis-120000
 
-    val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
-        .setInitialDelay(delay,TimeUnit.MILLISECONDS)
-        .setConstraints(constraints)
-        .build()
+        val notificationWorker = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .setInitialDelay(delay,TimeUnit.MILLISECONDS)
+            .setConstraints(constraints)
+            .build()
 
-    workManager.enqueue(notificationWorker)
+        workManager.enqueue(notificationWorker)
 
-    workManager.getWorkInfoByIdLiveData(notificationWorker.id)
-        .observeForever{workinfo ->
-            if (workinfo.state == WorkInfo.State.SUCCEEDED){
-                //createSuccessNotification()
-                createReminderNotification(reminder,context)
-            }else{
-                //createErrorNotification()
+        workManager.getWorkInfoByIdLiveData(notificationWorker.id)
+            .observeForever{workinfo ->
+                if (workinfo.state == WorkInfo.State.SUCCEEDED){
+                    //createSuccessNotification()
+                    createReminderNotification2(reminder,context)
+                }else{
+                    //createErrorNotification()
+                }
             }
-        }
+
+
 }
+
+
+
+private fun createNotificationChannel(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val name = "RemindernotificationChannel"
+        val descriptionText = "ReminderNotificationChannelDescriptionText"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
+            description = descriptionText
+        }
+        val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+}
+
+
+private fun createReminderNotification(
+    reminder:Reminder,
+    //context: Context
+){
+    val notificationId = 2
+
+
+
+    //val intent = Intent(context, MainActivity::class.java).apply{
+    //    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    //}
+
+    //val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,intent,0)
+
+    //val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+    val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("You have one reminder due")
+        .setContentText("Reminder message:${reminder.reminderMessage}")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        //.setContentIntent(pendingIntent)
+        //.setSound(uri)
+        .setOnlyAlertOnce(true)
+
+    with(NotificationManagerCompat.from(Graph.appContext)){
+        notify(notificationId,builder.build())
+
+    }
+}
+
+
+private fun createReminderNotification2(
+    reminder:Reminder,
+    context: Context
+){
+    val notificationId = 3
+
+    val intent = Intent(context, MainActivity::class.java).apply{
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    }
+
+    val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,intent,0)
+
+    val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+    val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("You have one reminder due in 2 minutes")
+        .setContentText("Reminder message:${reminder.reminderMessage}")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setContentIntent(pendingIntent)
+        .setSound(uri)
+        .setOnlyAlertOnce(true)
+
+    with(NotificationManagerCompat.from(Graph.appContext)){
+        notify(notificationId,builder.build())
+
+    }
+}
+
+
+
+
+data class ReminderViewState(
+    val reminders: List<Reminder> = emptyList()
+)
+
+
+/*
+private fun createReminderNotification(reminder: Reminder){
+    val notificationId = 2
+    val builder = NotificationCompat.Builder(Graph.appContext,"CHANNEL_ID")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("Reminder created")
+        .setContentText("You created a reminder")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+    with(NotificationManagerCompat.from(Graph.appContext)){
+        notify(notificationId, builder.build())
+    }
+}
+ */
+
+
+/*
+private fun createSuccessNotification(){
+    val notificationId = 1
+    val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle("Success!")
+        .setContentText("Countdown completed successfully.")
+        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+    with(NotificationManagerCompat.from(Graph.appContext)){
+        notify(notificationId,builder.build())
+    }
+}
+ */
 
 /*
 private fun setOneTimeNotification(){
@@ -157,33 +274,8 @@ private fun setOneTimeNotification(){
 }
 */
 
-private fun createNotificationChannel(context: Context) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val name = "RemindernotificationChannel"
-        val descriptionText = "ReminderNotificationChannelDescriptionText"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
-            description = descriptionText
-        }
-        val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-}
 
-/*
-private fun createSuccessNotification(){
-    val notificationId = 1
-    val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
-        .setSmallIcon(R.drawable.ic_launcher_background)
-        .setContentTitle("Success!")
-        .setContentText("Countdown completed successfully.")
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-    with(NotificationManagerCompat.from(Graph.appContext)){
-        notify(notificationId,builder.build())
-    }
-}
- */
 
 
 private fun createFailedNotification(){
@@ -198,52 +290,3 @@ private fun createFailedNotification(){
         notify(notificationId,builder.build())
     }
 }
-
-
-private fun createReminderNotification(
-    reminder:Reminder,
-    context: Context
-){
-    val notificationId = 2
-
-    val intent = Intent(context, MainActivity::class.java).apply{
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-    }
-
-    val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0,intent,0)
-
-    val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
-    val builder = NotificationCompat.Builder(Graph.appContext, "CHANNEL_ID")
-        .setSmallIcon(R.drawable.ic_launcher_background)
-        .setContentTitle("You have one reminder due")
-        .setContentText("Reminder message:${reminder.reminderMessage}")
-        .setPriority(NotificationCompat.PRIORITY_HIGH)
-        .setContentIntent(pendingIntent)
-        .setSound(uri)
-        .setOnlyAlertOnce(true)
-
-    with(NotificationManagerCompat.from(Graph.appContext)){
-        notify(notificationId,builder.build())
-
-    }
-}
-
-/*
-private fun createReminderNotification(reminder: Reminder){
-    val notificationId = 2
-    val builder = NotificationCompat.Builder(Graph.appContext,"CHANNEL_ID")
-        .setSmallIcon(R.drawable.ic_launcher_background)
-        .setContentTitle("Reminder created")
-        .setContentText("You created a reminder")
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-    with(NotificationManagerCompat.from(Graph.appContext)){
-        notify(notificationId, builder.build())
-    }
-}
- */
-
-
-data class ReminderViewState(
-    val reminders: List<Reminder> = emptyList()
-)

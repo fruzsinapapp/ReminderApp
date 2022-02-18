@@ -46,9 +46,10 @@ fun Authentication(
             verticalArrangement = Arrangement.Center
         ){
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(text="How would you like to authenticate yourself?")
+            Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = {
                     navController.navigate("login")
@@ -59,7 +60,7 @@ fun Authentication(
             ){
                 Text(text = "Usearname and password")
             }
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = {
                     navController.navigate("passcode")

@@ -55,7 +55,7 @@ fun Login(
             verticalArrangement = Arrangement.Center
         ){
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = username.value,
                 placeholder ={"xyz"},
@@ -66,7 +66,7 @@ fun Login(
                     keyboardType = KeyboardType.Text
                 )
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = password.value,
                 onValueChange = {password.value = it},
@@ -77,7 +77,7 @@ fun Login(
                 ),
                 visualTransformation = PasswordVisualTransformation()
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = {
                     //navController.navigate("home")

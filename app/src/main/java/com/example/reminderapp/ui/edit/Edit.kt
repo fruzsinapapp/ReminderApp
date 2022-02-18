@@ -110,7 +110,7 @@ fun Edit(
                     dateSetListener, year, month, day
                 )
 
-                Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(20.dp))
 
                 Button(
                     onClick = {
@@ -138,7 +138,7 @@ fun Edit(
                     timeSetListener, hour, minute, true
                 )
 
-                Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(20.dp))
 
                 Button(
                     onClick = {
@@ -148,7 +148,7 @@ fun Edit(
                     Text(text="Open time-picker")
                 }
 
-                Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(20.dp))
 
                 Button(
                     enabled = true,
@@ -211,7 +211,7 @@ fun ShowTimePicker(context: Context){
     )
         Text(text="Selected time: ${time.value}")
 
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(20.dp))
         Button(
             onClick = {
                 timePickerDialog.show()
@@ -247,7 +247,7 @@ fun ShowDatePicker(context: Context){
 
 
         Text(text="Selected time: ${date.value}")
-        Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(20.dp))
         Button(
             onClick = {
                 datePickerDialog.show()

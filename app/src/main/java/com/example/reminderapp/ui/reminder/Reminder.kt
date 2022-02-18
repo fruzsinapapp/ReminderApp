@@ -82,7 +82,7 @@ fun Reminder(
                     label = { Text(text = "Reminder message")},
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 /**
                  *
@@ -112,7 +112,7 @@ fun Reminder(
                     dateSetListener, year, month, day
                 )
 
-                Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(20.dp))
 
                 Button(
                     onClick = {
@@ -138,7 +138,7 @@ fun Reminder(
                     timeSetListener, hour, minute, true
                 )
 
-                Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(20.dp))
 
                 Button(
                     onClick = {
@@ -169,7 +169,7 @@ fun Reminder(
                     Text("Without")
                 }
 
-
+                Spacer(modifier = Modifier.size(20.dp))
 
 
                 Button(

@@ -163,6 +163,7 @@ fun ReminderMessages(
                 top.linkTo(parent.top, 10.dp)
             }
         )
+        /*
         Text(
             text=reminder.withNotification.toString(),
             maxLines = 1,
@@ -178,6 +179,7 @@ fun ReminderMessages(
                 top.linkTo(parent.top, 10.dp)
             }
         )
+        */
 
         IconButton(
             onClick = {
@@ -235,10 +237,10 @@ private fun Long.toDateString(): String {
 }
 
 
-fun getTimeStamp(timeinMillies: Long): String {
+fun getTimeStamp(timeInMillis: Long): String {
     var date: String? = null
-    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss") // modify format
-    date = formatter.format(Date(timeinMillies))
+    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    date = formatter.format(Date(timeInMillis))
     return date
 }
 
