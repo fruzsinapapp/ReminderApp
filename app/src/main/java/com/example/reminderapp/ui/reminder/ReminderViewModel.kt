@@ -165,7 +165,7 @@ private fun createReminderNotification(
         .setContentTitle("You have one reminder due")
         .setContentText("Reminder message:${reminder.reminderMessage}")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        //.setContentIntent(pendingIntent)
+        .setContentIntent(pendingIntent)
         .setSound(uri)
         .setOnlyAlertOnce(true)
 
@@ -195,7 +195,7 @@ private fun createReminderNotification2(
         .setContentTitle("You have one reminder due in 2 minutes")
         .setContentText("Reminder message:${reminder.reminderMessage}")
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        //.setContentIntent(pendingIntent)
+        .setContentIntent(pendingIntent)
         .setSound(uri)
         .setOnlyAlertOnce(true)
 
