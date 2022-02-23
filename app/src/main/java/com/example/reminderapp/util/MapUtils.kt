@@ -20,15 +20,17 @@ fun rememberMapViewWithLifecycle(): MapView {
     val context = LocalContext.current
     val mapView = remember {
         MapView(context).apply {
+            //id from layout
             id = R.id.map
         }
     }
 
-    // Make the mapview follow the lifecycle of this composable
+    // --> the mapview follow the lifecycle of this composable
     val lifecycleObserver = rememberMapLifecycleObserver(mapView)
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     DisposableEffect(lifecycle) {
         lifecycle.addObserver(lifecycleObserver)
+        //if we need to remove the observer we have
         onDispose { lifecycle.removeObserver(lifecycleObserver) }
     }
 

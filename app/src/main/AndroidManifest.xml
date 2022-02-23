@@ -15,10 +15,7 @@
         //android:image="@drawable/background1"
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDa9RdKuIiAbShK9EwbuBX9YCHrO74ZSY0" />
-
-
-
+            android:value="AIzaSyBQoBhq81oevRwqdkVlGUOO_nmQMVWImt4" />
 
         <activity
             android:name=".ui.MainActivity"
