@@ -2,6 +2,7 @@ package com.example.reminderapp.ui
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.reminderapp.ReminderAppState
@@ -10,6 +11,7 @@ import com.example.reminderapp.ui.authentication.Authentication
 import com.example.reminderapp.ui.edit.Edit
 import com.example.reminderapp.ui.home.Home
 import com.example.reminderapp.ui.login.Login
+import com.example.reminderapp.ui.maps.ReminderLocationMap
 import com.example.reminderapp.ui.passcode.Passcode
 import com.example.reminderapp.ui.profile.Profile
 import com.example.reminderapp.ui.reminder.Reminder
@@ -44,7 +46,11 @@ fun ReminderApp(
         }
 
         composable(route="reminder"){
-            Reminder(onBackPress = appState::navigateBack)
+            Reminder(navController = appState.navController, onBackPress = appState::navigateBack)
+        }
+
+        composable(route="map"){
+            ReminderLocationMap(navController = appState.navController)
         }
 
 

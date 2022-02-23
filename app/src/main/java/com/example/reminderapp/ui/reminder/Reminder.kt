@@ -32,6 +32,7 @@ import android.widget.CalendarView
 import android.widget.CalendarView.OnDateChangeListener
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
+import androidx.navigation.NavController
 import com.example.reminderapp.Graph
 
 object WithNotification{
@@ -39,9 +40,10 @@ object WithNotification{
     const val without = "Without notification"
 }
 
-@RequiresApi(Build.VERSION_CODES.N)
+
 @Composable
 fun Reminder(
+    navController: NavController,
     onBackPress: () -> Unit,
     viewModel: ReminderViewModel = viewModel()
 ) {
@@ -82,6 +84,12 @@ fun Reminder(
                     label = { Text(text = "Reminder message")},
                     modifier = Modifier.fillMaxWidth()
                 )
+
+                OutlinedButton(
+                    onClick = { navController.navigate("map") }
+                ) {
+                    Text(text="Reminder location")
+                }
                 Spacer(modifier = Modifier.height(20.dp))
                 //Radio button
                 Text("Would you like to have a notification for you reminder?")
