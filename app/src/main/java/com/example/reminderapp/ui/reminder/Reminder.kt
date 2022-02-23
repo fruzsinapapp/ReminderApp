@@ -2,12 +2,8 @@ package com.example.reminderapp.ui.reminder
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
-import android.os.Build
 import android.widget.DatePicker
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,25 +11,16 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
-import android.widget.CalendarView
 
-import android.widget.CalendarView.OnDateChangeListener
 import android.widget.TimePicker
-import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
-import com.example.reminderapp.Graph
+import com.google.android.gms.maps.model.LatLng
 
 object WithNotification{
     const val with = "With notification"
@@ -54,6 +41,15 @@ fun Reminder(
     val message = rememberSaveable { mutableStateOf("") }
     val withOrWithout = remember{ mutableStateOf("")}
 
+    val xLocation = rememberSaveable { mutableStateOf("") }
+    val yLocation = rememberSaveable { mutableStateOf("") }
+
+
+    val latlng = navController
+        .currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<LatLng>("location_data") //same key!
+        ?.value
 
     Surface {
         Column(
@@ -84,12 +80,19 @@ fun Reminder(
                     label = { Text(text = "Reminder message")},
                     modifier = Modifier.fillMaxWidth()
                 )
+                if (latlng==null){
+                    OutlinedButton(
+                        onClick = { navController.navigate("map") }
+                    ) {
+                        Text(text="Reminder location")
+                    }
+                } else {
+                    Text(
+                        text = "Lat: ${latlng.latitude}, \nLng: ${latlng.longitude}"
+                    )
 
-                OutlinedButton(
-                    onClick = { navController.navigate("map") }
-                ) {
-                    Text(text="Reminder location")
                 }
+
                 Spacer(modifier = Modifier.height(20.dp))
                 //Radio button
                 Text("Would you like to have a notification for you reminder?")
@@ -191,7 +194,9 @@ fun Reminder(
                                     reminderTime = calendar.timeInMillis,
                                     reminderSeen = false,
                                     creationTime = Calendar.getInstance().timeInMillis,
-                                    withNotification = withOrWithout.value== WithNotification.with
+                                    withNotification = withOrWithout.value== WithNotification.with,
+                                    locationX = latlng?.latitude,
+                                    locationY = latlng?.longitude
                                 )
                             )
                         }
@@ -209,6 +214,7 @@ fun Reminder(
         }
     }
 }
+
 
 
 

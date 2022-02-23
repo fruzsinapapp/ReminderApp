@@ -45,7 +45,7 @@ fun ReminderLocationMap(
                 map.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(location, 10f)
                 )
-/*
+
                 val markerOptions = MarkerOptions()
                     .title("Welcome to Oulu")
                     .position(location)
@@ -53,7 +53,7 @@ fun ReminderLocationMap(
 
                 setMapLongClick(map = map, navController = navController)
 
- */
+
             }
         }
     }
@@ -63,6 +63,8 @@ private fun setMapLongClick(
     map: GoogleMap,
     navController: NavController
 ) {
+
+    //snipet
     map.setOnMapLongClickListener { latlng ->
         val snippet = String.format(
             Locale.getDefault(),
@@ -72,11 +74,15 @@ private fun setMapLongClick(
         )
 
         map.addMarker(
-            MarkerOptions().position(latlng).title("Payment location").snippet(snippet)
-        ).apply {
+            MarkerOptions().position(latlng).title("Reminder location").snippet(snippet)
+        )
+            //when we go back we can get the data from the map from here, in the reminder
+            .apply {
             navController.previousBackStackEntry
                 ?.savedStateHandle
                 ?.set("location_data", latlng)
         }
+
+
     }
 }
