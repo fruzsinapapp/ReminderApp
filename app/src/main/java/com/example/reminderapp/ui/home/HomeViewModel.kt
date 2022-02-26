@@ -45,7 +45,8 @@ class HomeViewModel(
                 creationTime = Calendar.getInstance().timeInMillis,
                 withNotification = true,
                 locationX = 0.0,
-                locationY = 0.0),
+                locationY = 0.0,
+                withLocation = false),
             Reminder(
                 reminderMessage = "Test2",
                 reminderTime = 45,
@@ -53,7 +54,8 @@ class HomeViewModel(
                 creationTime = Calendar.getInstance().timeInMillis,
                 withNotification = true,
                 locationX = 0.0,
-                locationY = 0.0),
+                locationY = 0.0,
+                withLocation = false),
             Reminder(
                 reminderMessage = "Test3",
                 reminderTime = 45,
@@ -61,7 +63,8 @@ class HomeViewModel(
                 creationTime = Calendar.getInstance().timeInMillis,
                 withNotification = false,
                 locationX = 0.0,
-                locationY = 0.0),
+                locationY = 0.0,
+                withLocation = false),
             Reminder(
                 reminderMessage = "Test4",
                 reminderTime = 66,
@@ -69,7 +72,8 @@ class HomeViewModel(
                 creationTime = Calendar.getInstance().timeInMillis,
                 withNotification = false,
                 locationX = 0.0,
-                locationY = 0.0)
+                locationY = 0.0,
+                withLocation = false)
         )
         viewModelScope.launch {
             list.forEach{reminder -> reminderRepository.addReminder(reminder)}

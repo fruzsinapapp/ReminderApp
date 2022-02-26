@@ -26,6 +26,10 @@ object WithNotification{
     const val with = "With notification"
     const val without = "Without notification"
 }
+object WithLocation{
+    const val with = "With location"
+    const val without = "Without location"
+}
 
 
 @Composable
@@ -40,6 +44,7 @@ fun Reminder(
 
     val message = rememberSaveable { mutableStateOf("") }
     val withOrWithout = remember{ mutableStateOf("")}
+    val withOrWithoutLocation = remember{ mutableStateOf("")}
 
     val xLocation = rememberSaveable { mutableStateOf("") }
     val yLocation = rememberSaveable { mutableStateOf("") }
@@ -108,6 +113,22 @@ fun Reminder(
                     RadioButton(
                         selected = withOrWithout.value==WithNotification.without,
                         onClick = {withOrWithout.value = WithNotification.without}
+                    )
+                    Text("No")
+                }
+                Text("Would you like to have a location for you reminder?")
+                Spacer(modifier = Modifier.size(20.dp))
+                Row{
+
+                    RadioButton(
+                        selected = withOrWithoutLocation.value==WithLocation.with,
+                        onClick = {withOrWithoutLocation.value = WithLocation.with}
+                    )
+                    Text("Yes")
+                    Spacer(modifier = Modifier.size(20.dp))
+                    RadioButton(
+                        selected = withOrWithoutLocation.value==WithLocation.without,
+                        onClick = {withOrWithoutLocation.value = WithLocation.without}
                     )
                     Text("No")
                 }
@@ -196,7 +217,8 @@ fun Reminder(
                                     creationTime = Calendar.getInstance().timeInMillis,
                                     withNotification = withOrWithout.value== WithNotification.with,
                                     locationX = latlng?.latitude,
-                                    locationY = latlng?.longitude
+                                    locationY = latlng?.longitude,
+                                    withLocation = withOrWithoutLocation.value==WithLocation.with
                                 )
                             )
                         }
