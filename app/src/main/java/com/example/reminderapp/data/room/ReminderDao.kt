@@ -8,7 +8,9 @@ import java.util.*
 @Dao
 abstract class ReminderDao {
 
-    @Query("SELECT  * FROM reminders WHERE reminder_time < :currentTime")
+
+    //gyok alatt((adotthelyX-reminderX)^2 + (adotthelyY-reminderY^2))
+    @Query("SELECT  * FROM reminders WHERE location_y < :currentTime")
     abstract fun remindersDue(currentTime : Long): Flow<List<Reminder>>
 
 

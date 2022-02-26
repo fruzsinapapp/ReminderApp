@@ -1,0 +1,134 @@
+package com.example.reminderapp.ui.remindersNear
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.reminderapp.R
+import com.example.reminderapp.data.entity.Reminder
+import com.example.reminderapp.ui.home.HomeViewModel
+import com.example.reminderapp.ui.home.reminderMessages.ReminderMessages
+import com.google.accompanist.insets.systemBarsPadding
+import java.util.*
+
+@Composable
+fun RemindersNear(
+    viewModel: RemindersNearViewModel = viewModel(),
+    navController: NavController,
+    onBackPress: () -> Unit
+) {
+
+    val viewState by viewModel .state.collectAsState()
+
+
+    if(viewState.reminders.isNotEmpty()){
+        Surface(modifier = Modifier.fillMaxSize()){
+            RemindersNearContent(
+                reminders=viewState.reminders,
+                navController = navController,
+                onBackPress = onBackPress
+            )
+        }
+    }
+
+}
+
+@Composable
+fun RemindersNearContent(
+    reminders: List<Reminder>,
+    navController: NavController,
+    onBackPress: () -> Unit
+
+){
+    Scaffold (
+        modifier = Modifier.padding(bottom = 24.dp),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(route = "reminder") },
+                contentColor = Color.Black,
+                modifier = Modifier.padding(all=20.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null
+                )
+            }
+        }
+    ){
+        Column(
+            modifier = Modifier
+                .systemBarsPadding()
+                .fillMaxWidth()
+        ){
+            val appBarColor = MaterialTheme.colors.secondary.copy(alpha = 0.80f)
+            val calendar = Calendar.getInstance()
+            val currentTime = calendar.timeInMillis
+
+            RemindersNearAppBar(
+                backgroundColor = appBarColor,
+                navController = navController,
+                onBackPress = onBackPress)
+
+            ReminderMessages(
+                //currentTime = currentTime,
+                modifier = Modifier.fillMaxSize(),
+                navController = navController
+            )
+        }
+
+    }
+
+
+}
+
+
+@Composable
+private  fun RemindersNearAppBar(
+    backgroundColor: Color,
+    navController: NavController,
+    onBackPress: () -> Unit
+
+){
+    TopAppBar(
+        title = {
+            Text(
+                text = stringResource(R.string.app_name),
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .heightIn(max = 24.dp)
+            )
+        },
+        backgroundColor = backgroundColor,
+        actions = {
+
+            IconButton(
+                onClick = onBackPress
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null
+                )
+            }
+
+            IconButton( onClick = {navController.navigate("authentication") } ) {
+                Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = stringResource(R.string.exit))
+            }
+            IconButton( onClick = {navController.navigate("profile") } ) {
+                Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = stringResource(R.string.account))
+            }
+        }
+    )
+}
