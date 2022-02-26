@@ -1,7 +1,12 @@
 package com.example.reminderapp.ui.maps
 
 import android.Manifest
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.compose.foundation.background
@@ -16,13 +21,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.reminderapp.Graph
 import com.example.reminderapp.util.rememberMapViewWithLifecycle
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.GeofencingClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.CircleOptions
@@ -31,7 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.ktx.awaitMap
 import kotlinx.coroutines.launch
 import java.util.*
-
+import kotlin.random.Random
 
 
 const val GEOFENCE_RADIUS = 200
@@ -43,20 +47,19 @@ const val CAMERA_ZOOM_LEVEL = 13f
 const val LOCATION_REQUEST_CODE = 123
 
 
-
+lateinit var fusedLocationClient: FusedLocationProviderClient
+lateinit var geofencingClient: GeofencingClient
 
 @Composable
 fun ReminderLocationMap(
-    navController: NavController
+    navController: NavController,
+    key: String
 ) {
     val mapView = rememberMapViewWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
 
 
 //geofencing
-    lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var geofencingClient: GeofencingClient
-
     val context = LocalContext.current
     fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     geofencingClient = LocationServices.getGeofencingClient(context)
@@ -71,6 +74,8 @@ fun ReminderLocationMap(
             coroutineScope.launch {
                 //async --> coroutine
                 val map = mapView.awaitMap()
+
+
                 //map can be zoomed
                 map.uiSettings.isZoomControlsEnabled = true
 
@@ -108,10 +113,6 @@ fun ReminderLocationMap(
 
  */
 
-
-
-
-
                 //current location
                 val location = LatLng(65.06, 25.47)
 
@@ -125,7 +126,7 @@ fun ReminderLocationMap(
                 map.addMarker(markerOptions)
 
 
-                setMapLongClick(map = map, navController = navController)
+                setMapLongClick(map = map, navController = navController,context, key)
 
 
             }
@@ -135,7 +136,9 @@ fun ReminderLocationMap(
 
 private fun setMapLongClick(
     map: GoogleMap,
-    navController: NavController
+    navController: NavController,
+    context: Context,
+    key: String
 ) {
 
     //snipet
@@ -165,12 +168,57 @@ private fun setMapLongClick(
                 .fillColor(android.graphics.Color.argb(70, 150, 150, 150))
                 .radius(GEOFENCE_RADIUS.toDouble())
         )
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
 
+        createGeoFence(latlng,key,geofencingClient, context,key)
 
     }
+
+
+
 }
 
+private fun createGeoFence(location: LatLng, id: String, geofencingClient: GeofencingClient, context: Context,key: String) {
+    val geofence = Geofence.Builder()
+        .setRequestId(GEOFENCE_ID)
+        .setCircularRegion(location.latitude, location.longitude, GEOFENCE_RADIUS.toFloat())
+        .setExpirationDuration(GEOFENCE_EXPIRATION.toLong())
+        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL)
+        .setLoiteringDelay(GEOFENCE_DWELL_DELAY)
+        .build()
 
+    val geofenceRequest = GeofencingRequest.Builder()
+        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+        .addGeofence(geofence)
+        .build()
+
+    val intent = Intent(context, GeofenceReceiver::class.java) //GeofenceReceiver --> we monitoring here our broadcast events
+        .putExtra("key", key)
+        .putExtra("message", "Geofence alert - ${location.latitude}, ${location.longitude}")
+
+    val pendingIntent = PendingIntent.getBroadcast(
+        Graph.appContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (ContextCompat.checkSelfPermission(
+                Graph.appContext, Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ),
+                GEOFENCE_LOCATION_REQUEST_CODE
+            )
+        } else {
+            geofencingClient.addGeofences(geofenceRequest, pendingIntent)
+        }
+    } else {
+        geofencingClient.addGeofences(geofenceRequest, pendingIntent)
+    }
+}
 
 
 /*
@@ -186,3 +234,46 @@ private fun isLocationPermissionGranted(
 }
 
  */
+
+
+/*
+    fun removeGeofences(context: Context, triggeringGeofenceList: MutableList<Geofence>) {
+        val geofenceIdList = mutableListOf<String>()
+        for (entry in triggeringGeofenceList) {
+            geofenceIdList.add(entry.requestId)
+        }
+        LocationServices.getGeofencingClient(context).removeGeofences(geofenceIdList)
+    }
+
+    fun showNotification(context: Context?, message: String) {
+        val CHANNEL_ID = "REMINDER_NOTIFICATION_CHANNEL"
+        var notificationId = 1589
+        notificationId += Random(notificationId).nextInt(1, 30)
+
+        val notificationBuilder = NotificationCompat.Builder(context!!.applicationContext, CHANNEL_ID)
+            //.setSmallIcon()
+            .setContentTitle("Geofencing")
+            .setContentText(message)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText(message)
+            )
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Geofencing",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = context.getString(R.string.app_name)
+            }
+            notificationManager.createNotificationChannel(channel)
+        }
+        notificationManager.notify(notificationId, notificationBuilder.build())
+    }
+
+
+*/

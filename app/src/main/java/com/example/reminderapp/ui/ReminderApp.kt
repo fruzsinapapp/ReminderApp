@@ -51,9 +51,7 @@ fun ReminderApp(
             Reminder(navController = appState.navController, onBackPress = appState::navigateBack)
         }
 
-        composable(route="map"){
-            ReminderLocationMap(navController = appState.navController)
-        }
+
 
         composable(route="firstScreen"){
             FirstScreen(navController = appState.navController)
@@ -69,10 +67,14 @@ fun ReminderApp(
             (entry.arguments?.getString("reminderId")?:""),
             onBackPress = appState::navigateBack
         )
-
-
         }
-
+        composable(route="map/{key}"){
+            entry ->
+            ReminderLocationMap(
+                navController = appState.navController,
+                (entry.arguments?.getString("reminderId")?:"")
+            )
+        }
 
 
 
