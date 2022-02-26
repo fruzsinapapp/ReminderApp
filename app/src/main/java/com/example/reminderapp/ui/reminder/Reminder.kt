@@ -250,6 +250,7 @@ fun Reminder(
                             )
 
                             val data = reference.push().child("reminders").setValue(reminderToSave)
+
                         }
                         onBackPress()
 

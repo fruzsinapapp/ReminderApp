@@ -7,8 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.reminderapp.ReminderAppState
 import com.example.reminderapp.rememberReminderAppState
+import com.example.reminderapp.ui.allReminders.AllReminders
 import com.example.reminderapp.ui.authentication.Authentication
 import com.example.reminderapp.ui.edit.Edit
+import com.example.reminderapp.ui.firstScreen.FirstScreen
 import com.example.reminderapp.ui.home.Home
 import com.example.reminderapp.ui.login.Login
 import com.example.reminderapp.ui.maps.ReminderLocationMap
@@ -53,6 +55,13 @@ fun ReminderApp(
             ReminderLocationMap(navController = appState.navController)
         }
 
+        composable(route="firstScreen"){
+            FirstScreen(navController = appState.navController)
+        }
+
+        composable(route="allReminders"){
+            AllReminders(navController = appState.navController, onBackPress = appState::navigateBack)
+        }
 
         composable(route="edit/{reminderId}"){
             entry-> Edit(

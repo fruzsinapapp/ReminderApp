@@ -232,7 +232,7 @@ private fun checkPin(
     context: Context
 ) {
     if (inputPin.joinToString("") == sharedPreferences.getString("code","")) {
-        navController.navigate("home")
+        navController.navigate("firstScreen")
     } else {
         inputPin.clear()
                 Toast.makeText(
