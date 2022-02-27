@@ -277,8 +277,6 @@ fun Reminder(
                                     locationY = LatLngValue.longitude,//latlng?.longitude,
                                     withLocation = withOrWithoutLocation.value==WithLocation.with
                                 )
-
-
                             )
                             /*
                             val reminderToSave= Reminder(

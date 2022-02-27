@@ -4,7 +4,9 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.job.JobInfo
 import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -43,6 +45,7 @@ private val TAG: String = MapActivity::class.java.simpleName
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geofencingClient: GeofencingClient
 
@@ -62,6 +65,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+
+
+        
         map.uiSettings.isZoomControlsEnabled = true
 
         if (!isLocationPermissionGranted()) {
@@ -123,7 +129,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     .title(poi.name)
             )?.showInfoWindow()
 
-            //scheduleJob()
+            scheduleJob()
         }
     }
 
@@ -143,7 +149,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                     .radius(GEOFENCE_RADIUS.toDouble())
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
-
+            //scheduleJob()
 
             val database = Firebase.database("https://reminderapp-342212-default-rtdb.europe-west1.firebasedatabase.app/")
             val reference = database.reference
@@ -277,11 +283,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             LocationServices.getGeofencingClient(context).removeGeofences(geofenceIdList)
         }
-        fun getLatLng(latlng:String){
-            val latlng = latlng
-            println(latlng.toString())
-            println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        }
+
 
         fun showNotification(context: Context?, message: String) {
             val CHANNEL_ID = "REMINDER_NOTIFICATION_CHANNEL"
@@ -313,7 +315,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             notificationManager.notify(notificationId, notificationBuilder.build())
         }
     }
-/*
+
     private fun scheduleJob() {
         val componentName = ComponentName(this, ReminderJobService::class.java)
         val info = JobInfo.Builder(321, componentName)
@@ -332,7 +334,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             scheduleJob()
         }
     }
-    */
+
 
     private fun cancelJob() {
         val scheduler = getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
