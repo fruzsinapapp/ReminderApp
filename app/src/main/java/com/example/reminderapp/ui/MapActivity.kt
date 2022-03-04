@@ -151,10 +151,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
             //scheduleJob()
 
+
+
             val database = Firebase.database("https://reminderapp-342212-default-rtdb.europe-west1.firebasedatabase.app/")
             val reference = database.reference
 
             val key = reference.push().key
+
+
+
+            LatLngValue.fbkey= key.toString()
+
+
+
             /*
             val database = Firebase.database
             val reference = database.getReference("reminders")

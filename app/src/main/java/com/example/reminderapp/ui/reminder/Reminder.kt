@@ -22,6 +22,7 @@ import java.util.*
 import android.widget.TimePicker
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
+import com.example.reminderapp.data.entity.FirebaseReminder
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.ui.GeofenceReceiver2
 import com.example.reminderapp.ui.LatLngValue
@@ -69,24 +70,23 @@ fun Reminder(
     val yLocation = rememberSaveable { mutableStateOf("") }
 
 
-/*
+
     val database = Firebase.database("https://reminderapp-342212-default-rtdb.europe-west1.firebasedatabase.app/")
 
     val reference = database.reference
 
     val key = reference.push().key
 
- */
 
-
-
-/*
+    /*
     val latlng = navController
         .currentBackStackEntry
         ?.savedStateHandle
         ?.getLiveData<LatLng>("location_data") //same key!
         ?.value
-*/
+
+     */
+
     val latitude=LatLngValue.latitude
     val longitude=LatLngValue.longitude
 
@@ -124,7 +124,9 @@ fun Reminder(
 
                 if (latitude==0.0 && longitude ==0.0){
                     OutlinedButton(
-                        onClick = { context.startActivity(Intent(context, MapActivity::class.java))}//{ navController.navigate("map/${key}") }
+                        onClick = { context.startActivity(Intent(context, MapActivity::class.java))}
+                        // { navController.navigate("map/${key}") }
+
                     ) {
                         Text(text="Reminder location")
                     }
@@ -278,21 +280,23 @@ fun Reminder(
                                     withLocation = withOrWithoutLocation.value==WithLocation.with
                                 )
                             )
-                            /*
-                            val reminderToSave= Reminder(
+
+                            val reminderToSave= FirebaseReminder(
+                                key = LatLngValue.fbkey.toString(),
                                 reminderMessage = message.value,
                                 reminderTime = calendar.timeInMillis,
                                 reminderSeen = false,
                                 creationTime = Calendar.getInstance().timeInMillis,
                                 withNotification = withOrWithout.value== WithNotification.with,
-                                locationX = latlng?.latitude,
-                                locationY = latlng?.longitude,
+                                lat = LatLngValue.latitude,
+                                lon = LatLngValue.longitude,
                                 withLocation = withOrWithoutLocation.value==WithLocation.with
+
                             )
 
-                             */
 
-                            //val data = reference.push().child("location").setValue(latlng)
+
+                            val data = reference.push().child("reminder").setValue(reminderToSave)
 
                         }
                         onBackPress()
