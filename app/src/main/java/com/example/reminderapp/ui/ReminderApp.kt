@@ -50,7 +50,9 @@ fun ReminderApp(
         }
 
         composable(route="map"){
-            ReminderLocationMap(navController = appState.navController)
+            ReminderLocationMap(navController = appState.navController,
+                onBackPress = appState::navigateBack)
+
         }
 
 
