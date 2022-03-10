@@ -3,7 +3,10 @@
     package="com.example.reminderapp" >
 
 
-    
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
     <application
         android:name=".ReminderApplication"
         android:allowBackup="true"
@@ -28,6 +31,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.maps.MapsActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ReminderApp.NoActionBar" >
+
+        </activity>
+
+        <receiver android:name=".ui.maps.GeofenceReceiver2"/>
     </application>
 
 </manifest>

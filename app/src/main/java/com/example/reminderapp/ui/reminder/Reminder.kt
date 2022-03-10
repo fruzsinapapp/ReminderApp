@@ -2,6 +2,7 @@ package com.example.reminderapp.ui.reminder
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -20,6 +21,7 @@ import java.util.*
 
 import android.widget.TimePicker
 import androidx.navigation.NavController
+import com.example.reminderapp.ui.maps.MapsActivity
 import com.google.android.gms.maps.model.LatLng
 
 object WithNotification{
@@ -87,7 +89,8 @@ fun Reminder(
                 )
                 if (latlng==null){
                     OutlinedButton(
-                        onClick = { navController.navigate("map") }
+                        //onClick = { navController.navigate("map") }
+                    onClick = {context.startActivity(Intent(context,MapsActivity::class.java))}
                     ) {
                         Text(text="Reminder location")
                     }
