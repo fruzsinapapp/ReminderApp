@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.reminderapp.util.rememberMapViewWithLifecycle
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -31,6 +33,13 @@ fun ReminderLocationMap(
     navController: NavController,
     onBackPress: () -> Unit
 ) {
+
+    lateinit var GMap: GoogleMap
+    lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var geofencingClient: GeofencingClient
+
+
+
     val mapView = rememberMapViewWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
 
@@ -54,22 +63,24 @@ fun ReminderLocationMap(
         AndroidView({mapView}) { mapView ->
             coroutineScope.launch {
                 //async --> coroutine
-                val map = mapView.awaitMap()
+                //val map = mapView.awaitMap()
+                GMap = mapView.awaitMap()
                 //map can be zoomed
-                map.uiSettings.isZoomControlsEnabled = true
+                //map.uiSettings.isZoomControlsEnabled = true
+                GMap.uiSettings.isZoomControlsEnabled = true
                 //current location
                 val location = LatLng(65.06, 25.47)
 
-                map.moveCamera(
+                GMap.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(location, 10f)
                 )
 
                 val markerOptions = MarkerOptions()
                     .title("Welcome to Oulu")
                     .position(location)
-                map.addMarker(markerOptions)
+                GMap.addMarker(markerOptions)
 
-                setMapLongClick(map = map, navController = navController)
+                setMapLongClick(map = GMap, navController = navController)
 
 
             }

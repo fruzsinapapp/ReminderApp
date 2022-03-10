@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit
 class ReminderViewModel(
     private val reminderRepository: ReminderRepository = Graph.reimderRepository,
 
-
 ): ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
     val context = Graph.appContext
@@ -141,11 +140,6 @@ private fun setNotificationBefore(reminder : Reminder,context: Context){
 
 }
 
-
-
-
-
-
 private fun createReminderNotification(
     reminder:Reminder,
     context: Context
@@ -206,12 +200,9 @@ private fun createReminderNotification2(
 }
 
 
-
-
 data class ReminderViewState(
     val reminders: List<Reminder> = emptyList()
 )
-
 
 /*
 private fun createReminderNotification(reminder: Reminder){
@@ -268,10 +259,6 @@ private fun setOneTimeNotification(){
         }
 }
 */
-
-
-
-
 
 private fun createFailedNotification(){
     val notificationId = 1
