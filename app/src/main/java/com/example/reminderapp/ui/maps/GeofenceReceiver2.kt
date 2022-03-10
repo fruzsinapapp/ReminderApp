@@ -24,7 +24,8 @@ class GeofenceReceiver2 : BroadcastReceiver() {
                     key = intent.getStringExtra("key")!!
                     text = intent.getStringExtra("message")!!
                 }
-                MapsActivity.showNotification(context.applicationContext,"XYZ")
+
+                MapsActivity.showNotification(context.applicationContext,text)
                 /*val firebase = Firebase.database
                 val reference = firebase.getReference("reminders")
 

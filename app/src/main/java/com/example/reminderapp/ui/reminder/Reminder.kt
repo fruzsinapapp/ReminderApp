@@ -241,7 +241,7 @@ fun Reminder(
                                     locationX = latlng?.latitude,
                                     locationY = latlng?.longitude,
                                     withLocation = withOrWithoutLocation.value==WithLocation.with
-                                ),lattilonngi,"xyz",geofencingClient
+                                ),lattilonngi,message.value,geofencingClient
                             )
 
                         }

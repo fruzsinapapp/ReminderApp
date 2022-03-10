@@ -91,7 +91,7 @@ private fun createGeoFence(location: LatLng, key: String, geofencingClient: Geof
 
     val intent = Intent(context, GeofenceReceiver2::class.java)
         .putExtra("key", key)
-        .putExtra("message", "Geofence alert - ${location.latitude}, ${location.longitude}")
+        .putExtra("message", key)
 
     val pendingIntent = PendingIntent.getBroadcast(
         context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT

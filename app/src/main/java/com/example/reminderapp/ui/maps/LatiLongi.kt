@@ -20,4 +20,14 @@ object LatiLongi {
     fun setlongi(value: Double){
         this.lati = value
     }
+
+    var checkEntered: Boolean = false
+
+    fun setcheckEntered(value: Boolean){
+        this.checkEntered = value
+    }
+
+    fun getcheckEntered() {
+        this.checkEntered
+    }
 }
