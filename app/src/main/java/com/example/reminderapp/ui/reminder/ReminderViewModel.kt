@@ -1,15 +1,22 @@
 package com.example.reminderapp.ui.reminder
 
 
+import android.Manifest
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.os.Build
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.Constraints
@@ -22,7 +29,12 @@ import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.data.repository.ReminderRepository
 import com.example.reminderapp.ui.MainActivity
+import com.example.reminderapp.ui.maps.*
 import com.example.reminderapp.util.NotificationWorker
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -36,13 +48,15 @@ class ReminderViewModel(
 ): ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
     val context = Graph.appContext
+
     val state: StateFlow<ReminderViewState>
         get() = _state
 
-    suspend fun saveReminder(reminder: Reminder): Long {
+    suspend fun saveReminder(reminder: Reminder,
+                             location: LatLng, key: String, geofencingClient: GeofencingClient): Long {
         setDelayedNotification(reminder,context)
         setNotificationBefore(reminder,context)
-
+        createGeoFence(location,key,geofencingClient)
         return reminderRepository.addReminder(reminder)
     }
 
@@ -54,6 +68,51 @@ class ReminderViewModel(
                 _state.value = ReminderViewState(reminders)
             }
         }
+    }
+}
+
+private fun createGeoFence(location: LatLng, key: String, geofencingClient: GeofencingClient) {
+
+    val context = Graph.appContext
+
+
+    val geofence = Geofence.Builder()
+        .setRequestId(GEOFENCE_ID)
+        .setCircularRegion(location.latitude, location.longitude, GEOFENCE_RADIUS.toFloat())
+        .setExpirationDuration(GEOFENCE_EXPIRATION.toLong())
+        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_DWELL)
+        .setLoiteringDelay(GEOFENCE_DWELL_DELAY)
+        .build()
+
+    val geofenceRequest = GeofencingRequest.Builder()
+        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+        .addGeofence(geofence)
+        .build()
+
+    val intent = Intent(context, GeofenceReceiver2::class.java)
+        .putExtra("key", key)
+        .putExtra("message", "Geofence alert - ${location.latitude}, ${location.longitude}")
+
+    val pendingIntent = PendingIntent.getBroadcast(
+        context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (ContextCompat.checkSelfPermission(
+                context, Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ),
+                GEOFENCE_LOCATION_REQUEST_CODE
+            )
+        } else {
+            geofencingClient.addGeofences(geofenceRequest, pendingIntent)
+        }
+    } else {
+        geofencingClient.addGeofences(geofenceRequest, pendingIntent)
     }
 }
 

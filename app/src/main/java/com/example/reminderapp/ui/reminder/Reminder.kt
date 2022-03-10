@@ -1,8 +1,12 @@
 package com.example.reminderapp.ui.reminder
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.widget.DatePicker
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -20,8 +24,14 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 import android.widget.TimePicker
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import com.example.reminderapp.ui.maps.MapsActivity
+import com.example.reminderapp.ui.maps.*
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 
 object WithNotification{
@@ -40,8 +50,17 @@ fun Reminder(
     onBackPress: () -> Unit,
     viewModel: ReminderViewModel = viewModel()
 ) {
-    //val context = Graph.appContext
     val context = LocalContext.current
+
+
+    lateinit var geofencingClient: GeofencingClient
+    geofencingClient = LocationServices.getGeofencingClient(context)
+
+    val lattilonngi= LatLng(LatiLongi.lati,LatiLongi.longi)
+
+
+    //val context = Graph.appContext
+
     val coroutineScope = rememberCoroutineScope()
 
     val message = rememberSaveable { mutableStateOf("") }
@@ -222,8 +241,9 @@ fun Reminder(
                                     locationX = latlng?.latitude,
                                     locationY = latlng?.longitude,
                                     withLocation = withOrWithoutLocation.value==WithLocation.with
-                                )
+                                ),lattilonngi,"xyz",geofencingClient
                             )
+
                         }
                         onBackPress()
 
@@ -239,6 +259,8 @@ fun Reminder(
         }
     }
 }
+
+
 
 
 

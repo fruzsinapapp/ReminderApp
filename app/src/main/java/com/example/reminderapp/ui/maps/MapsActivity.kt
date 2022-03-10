@@ -42,7 +42,6 @@ const val GEOFENCE_LOCATION_REQUEST_CODE = 12345
 const val CAMERA_ZOOM_LEVEL = 13f
 const val LOCATION_REQUEST_CODE = 123
 private val TAG: String = MapsActivity::class.java.simpleName
-
 const val GEOFENCE_RADIUS = 200
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -51,12 +50,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geofencingClient: GeofencingClient
 
+    lateinit var latilongi: LatLng
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.map)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -126,7 +127,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         setLongClick(map)
-        setPoiClick(map)
+        //setPoiClick(map)
     }
 
     private fun setPoiClick(map: GoogleMap) {
@@ -158,9 +159,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
 
             val key = "test"
-            createGeoFence(latlng, key!!, geofencingClient)
+            latilongi = latlng
+            LatiLongi.lati = latlng.latitude
+            LatiLongi.longi = latlng.longitude
+
+            //createGeoFence(latlng, key!!, geofencingClient)
         }
     }
+
+
 
     private fun createGeoFence(location: LatLng, key: String, geofencingClient: GeofencingClient) {
         val geofence = Geofence.Builder()
@@ -265,6 +272,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
+
+
         fun removeGeofences(context: Context, triggeringGeofenceList: MutableList<Geofence>) {
             val geofenceIdList = mutableListOf<String>()
             for (entry in triggeringGeofenceList) {
@@ -272,6 +281,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             LocationServices.getGeofencingClient(context).removeGeofences(geofenceIdList)
         }
+
 
         fun showNotification(context: Context?, message: String) {
             val CHANNEL_ID = "REMINDER_NOTIFICATION_CHANNEL"
