@@ -56,7 +56,7 @@ fun Reminder(
     lateinit var geofencingClient: GeofencingClient
     geofencingClient = LocationServices.getGeofencingClient(context)
 
-    val lattilonngi= LatLng(LatiLongi.lati,LatiLongi.longi)
+    val lattilonngi= LatLng(LatiLongi.latitude,LatiLongi.longitude)
 
 
     //val context = Graph.appContext
@@ -238,9 +238,10 @@ fun Reminder(
                                     reminderSeen = false,
                                     creationTime = Calendar.getInstance().timeInMillis,
                                     withNotification = withOrWithout.value== WithNotification.with,
-                                    locationX = latlng?.latitude,
-                                    locationY = latlng?.longitude,
-                                    withLocation = withOrWithoutLocation.value==WithLocation.with
+                                    locationX = LatiLongi.latitude,
+                                    locationY = LatiLongi.longitude,
+                                    withLocation = withOrWithoutLocation.value==WithLocation.with,
+                                    distance = 0.0
                                 ),lattilonngi,message.value,geofencingClient
                             )
 

@@ -1,5 +1,6 @@
 package com.example.reminderapp.ui.remindersNear.selectedReminders
 
+import android.location.Location
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.reminderapp.data.entity.Reminder
+import com.example.reminderapp.ui.maps.LOCATION_REQUEST_CODE
 import com.example.reminderapp.ui.remindersNear.selectedReminders.selectedMessages.SelectedMessages
 import com.google.accompanist.insets.systemBarsPadding
+import java.lang.Math.pow
+import java.lang.Math.sqrt
 import java.util.*
 
 
@@ -26,16 +30,27 @@ fun SelectedReminders(
     longi:String,
     navController: NavController,
     viewModel: SelectedRemindersViewModel = viewModel()
-) {
 
+) {
+    val x2 = 50
+    val y2 = 20
+    val dist1 = pow((x2-lati.toDouble()),2.0)
+    val dist2 = pow((y2-longi.toDouble()),2.0)
+
+    val results = FloatArray(1)
+    Location.distanceBetween(x2.toDouble(), y2.toDouble(),lati.toDouble(),longi.toDouble(),results)
     Surface {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
         ) {
+            SelectedMessages(navController = navController)
+            /*
             Text(text = lati)
             Text(text = longi)
+            Text(text = results[0].toString())
+             */
         }
     }
 

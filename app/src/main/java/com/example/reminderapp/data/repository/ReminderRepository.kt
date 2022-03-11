@@ -38,6 +38,8 @@ class ReminderRepository(
 
     fun remindersDue(currentTime : Long): Flow<List<Reminder>> = reminderDao.remindersDue(currentTime)
 
+    //fun remindersNear(lati: Double, longi: Double): Flow<List<Reminder>> = reminderDao.remindersNear(lati,longi)
+
 
     suspend fun getReminderWithId(reminderId: Long): Reminder? = reminderDao.getReminderWithId(reminderId)
 

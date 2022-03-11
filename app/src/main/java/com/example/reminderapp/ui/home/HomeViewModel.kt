@@ -43,7 +43,8 @@ class HomeViewModel(
                 withNotification = true,
                 locationX = 0.0,
                 locationY = 0.0,
-                withLocation = false),
+                withLocation = false,
+            distance = 0.0),
             Reminder(
                 reminderMessage = "Test2",
                 reminderTime = 45,
@@ -52,7 +53,8 @@ class HomeViewModel(
                 withNotification = true,
                 locationX = 0.0,
                 locationY = 0.0,
-                withLocation = false),
+                withLocation = false,
+            distance = 0.0),
             Reminder(
                 reminderMessage = "Test3",
                 reminderTime = 45,
@@ -61,7 +63,8 @@ class HomeViewModel(
                 withNotification = false,
                 locationX = 0.0,
                 locationY = 0.0,
-                withLocation = false),
+                withLocation = false,
+            distance = 0.0),
             Reminder(
                 reminderMessage = "Test4",
                 reminderTime = 66,
@@ -70,7 +73,8 @@ class HomeViewModel(
                 withNotification = false,
                 locationX = 0.0,
                 locationY = 0.0,
-                withLocation = false)
+                withLocation = false,
+                distance = 0.0)
         )
         viewModelScope.launch {
             list.forEach{reminder -> reminderRepository.addReminder(reminder)}

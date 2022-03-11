@@ -159,9 +159,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, CAMERA_ZOOM_LEVEL))
 
             val key = "test"
-            latilongi = latlng
-            LatiLongi.lati = latlng.latitude
-            LatiLongi.longi = latlng.longitude
+            //latilongi = latlng
+            LatiLongi.latitude = latlng.latitude
+            LatiLongi.longitude = latlng.longitude
 
             //createGeoFence(latlng, key!!, geofencingClient)
         }

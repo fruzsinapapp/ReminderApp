@@ -21,6 +21,8 @@ data class Reminder(
     @ColumnInfo(name = "creator_id") val creatorId: Long = 0,
 
     @ColumnInfo(name = "with_notification") val withNotification: Boolean,
-    @ColumnInfo(name = "with_location") val withLocation: Boolean
+    @ColumnInfo(name = "with_location") val withLocation: Boolean,
+
+    @ColumnInfo(name = "distance") var distance: Double
 )
 

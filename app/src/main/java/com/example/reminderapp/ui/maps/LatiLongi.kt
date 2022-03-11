@@ -2,14 +2,31 @@ package com.example.reminderapp.ui.maps
 
 object LatiLongi {
 
-    var lati: Double = 0.0
-    var longi : Double = 0.0
+    var latitude:Double = 0.0
+    var longitude:Double = 0.0
 
-    fun getlat() {
-        this.lati
+
+    fun setLat(value: Double){
+        this.latitude = value
+    }
+    fun getLat(): Double{
+        return latitude
     }
 
-    fun setlat(value: Double){
+    fun setLong(value: Double){
+        this.longitude = value
+    }
+    fun getLong(): Double{
+        return longitude
+    }
+
+}
+/*
+    fun getlati() {
+        return this.lati
+    }
+
+    fun setlati(value: Double){
         this.lati = value
     }
 
@@ -20,14 +37,4 @@ object LatiLongi {
     fun setlongi(value: Double){
         this.lati = value
     }
-
-    var checkEntered: Boolean = false
-
-    fun setcheckEntered(value: Boolean){
-        this.checkEntered = value
-    }
-
-    fun getcheckEntered() {
-        this.checkEntered
-    }
-}
+*/

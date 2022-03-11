@@ -1,5 +1,6 @@
 package com.example.reminderapp.ui.remindersNear.selectedReminders.selectedMessages
 
+import android.location.Location
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,14 +23,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
+import com.example.reminderapp.ui.allReminders.AllReminderMessagesViewModel
 import com.example.reminderapp.ui.home.reminderMessages.ReminderMessagesViewModel
 import com.example.reminderapp.util.viewModelProviderFactoryOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-
-
+import java.util.Collections.copy
 
 @Composable
 fun SelectedMessages(
@@ -39,19 +40,35 @@ fun SelectedMessages(
     //currentTime : Long
 ){
     val viewModel: SelectedMessagesViewModel = viewModel(
-        key = "reminder_list",
+        key = "selected",
         factory = viewModelProviderFactoryOf{ SelectedMessagesViewModel() }
     )
 
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
+    val x2 = 50.0
+    val y2 = 50.0
+
 
     Column(modifier = modifier ) {
 
+        val list2 = viewState.reminders
+        for (i in list2){
+            if (i.locationX!=null && i.locationY != null){
+                i.distance= calculateDistance(i.locationX!!.toDouble(),
+                    i.locationY!!.toDouble(),x2,y2).toDouble()
+            }
+            else{
+                i.distance= 5.0
+            }
+
+        }
+        val list3 = list2.filter { it.distance > 1 }
 
         ReminderList(
-            list = viewState.reminders,
+            list=list3,
+            //list = viewState.reminders,
             coroutineScope = coroutineScope,
             viewModel = viewModel(),
             navController = navController
@@ -59,6 +76,14 @@ fun SelectedMessages(
 
 
     }
+}
+
+
+fun calculateDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Float {
+    val results = FloatArray(1)
+    Location.distanceBetween(lat1, lng1, lat2, lng2, results)
+    // distance in meter
+    return results[0]
 }
 
 @Composable
@@ -91,6 +116,19 @@ fun ReminderList(
     }
 }
 
+fun helper(lati: Double, longi: Double,
+           remlat:Double,remlong: Double ): Double {
+
+
+
+    //Location.distanceBetween(x2.toDouble(), y2.toDouble(),lati.toDouble(),longi.toDouble(),results)
+
+    val results = FloatArray(1)
+    Location.distanceBetween(lati, longi,remlat,remlong,results)
+
+    return results[0].toDouble()
+
+}
 
 @Composable
 fun ReminderListItem(
@@ -114,7 +152,7 @@ fun ReminderListItem(
 
         //message
         Text(
-            text = reminder.locationX.toString(),
+            text = reminder.distance.toString(),
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderMessage) {

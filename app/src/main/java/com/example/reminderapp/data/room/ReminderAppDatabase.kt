@@ -6,7 +6,7 @@ import com.example.reminderapp.data.entity.Reminder
 
 @Database(
     entities = [Reminder::class],
-    version = 17,
+    version = 18,
     exportSchema = false
 )
 

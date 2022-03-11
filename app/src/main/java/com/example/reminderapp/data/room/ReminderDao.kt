@@ -1,5 +1,6 @@
 package com.example.reminderapp.data.room
 
+import android.location.Location
 import androidx.room.*
 import com.example.reminderapp.data.entity.Reminder
 import kotlinx.coroutines.flow.Flow
@@ -8,10 +9,14 @@ import java.util.*
 @Dao
 abstract class ReminderDao {
 
+    /*
+    @Query("SELECT  * FROM reminders WHERE helper(:lati,:longi,location_x,location_y) > 2")
+    abstract fun remindersNear(lati: Double, longi: Double): Flow<List<Reminder>>
+
+     */
+
     @Query("SELECT  * FROM reminders WHERE reminder_time < :currentTime")
     abstract fun remindersDue(currentTime : Long): Flow<List<Reminder>>
-
-
 
 
     @Query("SELECT * FROM reminders")
@@ -36,13 +41,10 @@ abstract class ReminderDao {
     @Query("UPDATE reminders SET reminder_seen = :seen WHERE id = :id")
     abstract suspend fun updateSeen(seen: Boolean,  id: Long)
 
-
-
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insertAll(entities: Collection<Reminder>)
 
     @Query("SELECT *FROM reminders WHERE id = :reminderId ")
     abstract suspend fun getReminderWithId(reminderId: Long):Reminder?
 }
+

@@ -196,7 +196,8 @@ fun Edit(
                                 locationY = 0.0,
                                 creatorId = 0,
                                 withNotification = withOrWithout.value== WithNotification.with,
-                                withLocation = false
+                                withLocation = false,
+                                distance = 0.0
                                     )
 
 
