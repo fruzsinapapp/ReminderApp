@@ -26,19 +26,11 @@ import java.util.*
 
 @Composable
 fun SelectedReminders(
-    lati:String,
-    longi:String,
     navController: NavController,
     viewModel: SelectedRemindersViewModel = viewModel()
 
 ) {
-    val x2 = 50
-    val y2 = 20
-    val dist1 = pow((x2-lati.toDouble()),2.0)
-    val dist2 = pow((y2-longi.toDouble()),2.0)
 
-    val results = FloatArray(1)
-    Location.distanceBetween(x2.toDouble(), y2.toDouble(),lati.toDouble(),longi.toDouble(),results)
     Surface {
         Column(
             modifier = Modifier
@@ -46,11 +38,7 @@ fun SelectedReminders(
                 .systemBarsPadding()
         ) {
             SelectedMessages(navController = navController)
-            /*
-            Text(text = lati)
-            Text(text = longi)
-            Text(text = results[0].toString())
-             */
+
         }
     }
 

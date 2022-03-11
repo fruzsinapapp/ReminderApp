@@ -14,6 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.reminderapp.ui.home.HomeViewModel
 import com.example.reminderapp.ui.maps.MapsActivity
+import com.example.reminderapp.ui.maps.SelectedSpot
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.android.gms.maps.model.LatLng
 
@@ -29,6 +30,11 @@ val context = LocalContext.current
         ?.savedStateHandle
         ?.getLiveData<LatLng>("location_data") //same key!
         ?.value
+
+if(latlng != null){
+    SelectedSpot.latitude= latlng.latitude
+    SelectedSpot.longitude=latlng.longitude
+}
 
 
     Surface {
@@ -55,6 +61,8 @@ val context = LocalContext.current
                 modifier = Modifier.padding(16.dp)
             ) {
                 if (latlng == null) {
+
+
                     OutlinedButton(
                         onClick = { navController.navigate("map") }
 
@@ -70,7 +78,8 @@ val context = LocalContext.current
 
 
                 OutlinedButton(
-                    onClick = { navController.navigate("selectedReminders/${latlng?.latitude.toString()},${latlng?.longitude.toString()}") }
+                    //onClick = { navController.navigate("selectedReminders/${latlng?.latitude.toString()},${latlng?.longitude.toString()}") }
+                    onClick = { navController.navigate("selectedReminders") }
 
 
                 ) {

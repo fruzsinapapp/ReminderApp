@@ -25,6 +25,7 @@ import com.example.reminderapp.R
 import com.example.reminderapp.data.entity.Reminder
 import com.example.reminderapp.ui.allReminders.AllReminderMessagesViewModel
 import com.example.reminderapp.ui.home.reminderMessages.ReminderMessagesViewModel
+import com.example.reminderapp.ui.maps.SelectedSpot
 import com.example.reminderapp.util.viewModelProviderFactoryOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -47,9 +48,8 @@ fun SelectedMessages(
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    val x2 = 50.0
-    val y2 = 50.0
-
+    val x2 = SelectedSpot.latitude
+    val y2 = SelectedSpot.longitude
 
     Column(modifier = modifier ) {
 
@@ -64,7 +64,7 @@ fun SelectedMessages(
             }
 
         }
-        val list3 = list2.filter { it.distance > 1 }
+        val list3 = list2.filter { it.distance <200 }
 
         ReminderList(
             list=list3,
