@@ -14,7 +14,7 @@ abstract class ReminderDao {
 
 
 
-    @Query("SELECT * FROM reminders LIMIT 15")
+    @Query("SELECT * FROM reminders")
     abstract fun reminders(): Flow<List<Reminder>>
 
 
