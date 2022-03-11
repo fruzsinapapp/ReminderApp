@@ -18,6 +18,7 @@ import com.example.reminderapp.ui.passcode.Passcode
 import com.example.reminderapp.ui.profile.Profile
 import com.example.reminderapp.ui.reminder.Reminder
 import com.example.reminderapp.ui.remindersNear.RemindersNear
+import com.example.reminderapp.ui.remindersNear.selectedReminders.SelectedReminders
 
 
 @Composable
@@ -73,6 +74,12 @@ fun ReminderApp(
                 onBackPress = appState::navigateBack)
 
         }
+        composable(route="selectedReminders/{latilangi}"){
+            entry -> SelectedReminders(
+            navController = appState.navController,
+            latilangi = (entry.arguments?.getString("latilangi")?:""))
+                //onBackPress = appState::navigateBack)
+        }
 
 
         composable(route="edit/{reminderId}"){
@@ -81,8 +88,6 @@ fun ReminderApp(
             (entry.arguments?.getString("reminderId")?:""),
             onBackPress = appState::navigateBack
         )
-
-
         }
 
 

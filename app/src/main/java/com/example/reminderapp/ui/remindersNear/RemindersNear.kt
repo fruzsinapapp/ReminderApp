@@ -59,13 +59,22 @@ val context = LocalContext.current
                         onClick = { navController.navigate("map") }
 
                     ) {
-                        Text(text = "Reminder location")
+                        Text(text = "Select location")
                     }
                 } else {
                     Text(
                         text = "Lat: ${latlng.latitude}, \nLng: ${latlng.longitude}"
                     )
 
+                }
+
+
+                OutlinedButton(
+                    onClick = { navController.navigate("selectedReminders/${latlng?.latitude.toString()}") }
+
+
+                ) {
+                    Text(text = "Show reminders")
                 }
             }
 

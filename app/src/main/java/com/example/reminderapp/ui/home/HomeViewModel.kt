@@ -19,8 +19,6 @@ class HomeViewModel(
         get() = _state
 
 
-
-
     init {
 
         viewModelScope.launch {
@@ -34,7 +32,6 @@ class HomeViewModel(
         }
         //loadRemindersFromDb()
     }
-
 
     private fun loadRemindersFromDb(){
         val list = mutableListOf(
@@ -79,8 +76,6 @@ class HomeViewModel(
             list.forEach{reminder -> reminderRepository.addReminder(reminder)}
         }
     }
-
-
 
 }
 
