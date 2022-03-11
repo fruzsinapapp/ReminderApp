@@ -56,7 +56,9 @@ class ReminderViewModel(
                              location: LatLng, key: String, geofencingClient: GeofencingClient): Long {
         setDelayedNotification(reminder,context)
         setNotificationBefore(reminder,context)
-        createGeoFence(location,key,geofencingClient)
+        if(reminder.withLocation) {
+            createGeoFence(location, key, geofencingClient)
+        }
         return reminderRepository.addReminder(reminder)
     }
 
@@ -114,6 +116,8 @@ private fun createGeoFence(location: LatLng, key: String, geofencingClient: Geof
     } else {
         geofencingClient.addGeofences(geofenceRequest, pendingIntent)
     }
+
+
 }
 
 
