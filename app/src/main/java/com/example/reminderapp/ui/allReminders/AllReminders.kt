@@ -53,6 +53,7 @@ fun AllRemindersContent(
 ){
     Scaffold (
         modifier = Modifier.padding(bottom = 24.dp),
+        /*
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navController.navigate(route = "reminder") },
@@ -65,6 +66,7 @@ fun AllRemindersContent(
                 )
             }
         }
+    */
     ){
         Column(
             modifier = Modifier

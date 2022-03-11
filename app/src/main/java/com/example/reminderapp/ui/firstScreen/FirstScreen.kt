@@ -59,6 +59,19 @@ fun FirstScreen(
             ){
                 Text(text = "All the reminders")
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate("remindersNear")
+                } ,
+                enabled = true,
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.small
+            ){
+                Text(text = "Reminders near you")
+            }
         }
     }
 }

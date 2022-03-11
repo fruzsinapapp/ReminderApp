@@ -17,6 +17,7 @@ import com.example.reminderapp.ui.maps.ReminderLocationMap
 import com.example.reminderapp.ui.passcode.Passcode
 import com.example.reminderapp.ui.profile.Profile
 import com.example.reminderapp.ui.reminder.Reminder
+import com.example.reminderapp.ui.remindersNear.RemindersNear
 
 
 @Composable
@@ -63,6 +64,12 @@ fun ReminderApp(
         }
         composable(route="allReminders"){
             AllReminders(navController = appState.navController,
+                onBackPress = appState::navigateBack)
+
+        }
+
+        composable(route="remindersNear"){
+            RemindersNear(navController = appState.navController,
                 onBackPress = appState::navigateBack)
 
         }
