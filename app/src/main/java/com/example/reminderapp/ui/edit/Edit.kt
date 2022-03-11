@@ -192,10 +192,11 @@ fun Edit(
                                 reminderTime = calendar.timeInMillis,
                                 reminderSeen = reminder.reminderSeen,
                                 creationTime = reminder.creationTime,
-                                locationX = 0,
-                                locationY = 0,
+                                locationX = 0.0,
+                                locationY = 0.0,
                                 creatorId = 0,
-                                withNotification = withOrWithout.value== WithNotification.with
+                                withNotification = withOrWithout.value== WithNotification.with,
+                                withLocation = false
                                     )
 
 

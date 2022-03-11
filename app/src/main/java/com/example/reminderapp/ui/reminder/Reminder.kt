@@ -1,13 +1,14 @@
 package com.example.reminderapp.ui.reminder
 
+import android.Manifest
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.DatePicker
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -15,43 +16,66 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.reminderapp.R
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
-import android.widget.CalendarView
 
-import android.widget.CalendarView.OnDateChangeListener
 import android.widget.TimePicker
-import androidx.annotation.RequiresApi
-import com.example.reminderapp.Graph
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import com.example.reminderapp.ui.maps.*
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 
 object WithNotification{
     const val with = "With notification"
     const val without = "Without notification"
 }
+object WithLocation{
+    const val with = "With location"
+    const val without = "Without location"
+}
 
-@RequiresApi(Build.VERSION_CODES.N)
+
 @Composable
 fun Reminder(
+    navController: NavController,
     onBackPress: () -> Unit,
     viewModel: ReminderViewModel = viewModel()
 ) {
-    //val context = Graph.appContext
     val context = LocalContext.current
+
+
+    lateinit var geofencingClient: GeofencingClient
+    geofencingClient = LocationServices.getGeofencingClient(context)
+
+    val lattilonngi= LatLng(LatiLongi.lati,LatiLongi.longi)
+
+
+    //val context = Graph.appContext
+
     val coroutineScope = rememberCoroutineScope()
 
     val message = rememberSaveable { mutableStateOf("") }
     val withOrWithout = remember{ mutableStateOf("")}
+    val withOrWithoutLocation = remember{ mutableStateOf("")}
 
+    val xLocation = rememberSaveable { mutableStateOf("") }
+    val yLocation = rememberSaveable { mutableStateOf("") }
+
+
+    val latlng = navController
+        .currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<LatLng>("location_data") //same key!
+        ?.value
 
     Surface {
         Column(
@@ -82,6 +106,20 @@ fun Reminder(
                     label = { Text(text = "Reminder message")},
                     modifier = Modifier.fillMaxWidth()
                 )
+                if (latlng==null){
+                    OutlinedButton(
+                        //onClick = { navController.navigate("map") }
+                    onClick = {context.startActivity(Intent(context,MapsActivity::class.java))}
+                    ) {
+                        Text(text="Reminder location")
+                    }
+                } else {
+                    Text(
+                        text = "Lat: ${latlng.latitude}, \nLng: ${latlng.longitude}"
+                    )
+
+                }
+
                 Spacer(modifier = Modifier.height(20.dp))
                 //Radio button
                 Text("Would you like to have a notification for you reminder?")
@@ -97,6 +135,22 @@ fun Reminder(
                     RadioButton(
                         selected = withOrWithout.value==WithNotification.without,
                         onClick = {withOrWithout.value = WithNotification.without}
+                    )
+                    Text("No")
+                }
+                Text("Would you like to have a location for you reminder?")
+                Spacer(modifier = Modifier.size(20.dp))
+                Row{
+
+                    RadioButton(
+                        selected = withOrWithoutLocation.value==WithLocation.with,
+                        onClick = {withOrWithoutLocation.value = WithLocation.with}
+                    )
+                    Text("Yes")
+                    Spacer(modifier = Modifier.size(20.dp))
+                    RadioButton(
+                        selected = withOrWithoutLocation.value==WithLocation.without,
+                        onClick = {withOrWithoutLocation.value = WithLocation.without}
                     )
                     Text("No")
                 }
@@ -183,9 +237,13 @@ fun Reminder(
                                     reminderTime = calendar.timeInMillis,
                                     reminderSeen = false,
                                     creationTime = Calendar.getInstance().timeInMillis,
-                                    withNotification = withOrWithout.value== WithNotification.with
-                                )
+                                    withNotification = withOrWithout.value== WithNotification.with,
+                                    locationX = latlng?.latitude,
+                                    locationY = latlng?.longitude,
+                                    withLocation = withOrWithoutLocation.value==WithLocation.with
+                                ),lattilonngi,message.value,geofencingClient
                             )
+
                         }
                         onBackPress()
 
@@ -201,6 +259,9 @@ fun Reminder(
         }
     }
 }
+
+
+
 
 
 

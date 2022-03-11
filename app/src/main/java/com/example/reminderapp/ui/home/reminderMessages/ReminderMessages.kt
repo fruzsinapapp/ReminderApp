@@ -129,7 +129,7 @@ fun ReminderMessages(
 
         //message
         Text(
-            text = reminder.reminderMessage,
+            text = reminder.locationX.toString(),
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderMessage) {

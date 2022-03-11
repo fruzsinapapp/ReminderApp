@@ -1,8 +1,6 @@
 package com.example.reminderapp.data.entity
 
 import androidx.room.*
-import java.util.*
-
 
 
 @Entity(
@@ -18,10 +16,11 @@ data class Reminder(
     @ColumnInfo(name = "reminder_time") val reminderTime: Long,
     @ColumnInfo(name = "reminder_seen") val reminderSeen: Boolean,
     @ColumnInfo(name = "creation_time") val creationTime: Long,
-    @ColumnInfo(name = "Location_x") val locationX: Long = 0,
-    @ColumnInfo(name = "location_y") val locationY: Long = 0,
+    @ColumnInfo(name = "Location_x") val locationX: Double?,
+    @ColumnInfo(name = "location_y") val locationY: Double?,
     @ColumnInfo(name = "creator_id") val creatorId: Long = 0,
 
-    @ColumnInfo(name = "with_notification") val withNotification: Boolean
+    @ColumnInfo(name = "with_notification") val withNotification: Boolean,
+    @ColumnInfo(name = "with_location") val withLocation: Boolean
 )
 
