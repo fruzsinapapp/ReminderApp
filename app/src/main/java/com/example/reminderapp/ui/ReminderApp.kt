@@ -74,10 +74,12 @@ fun ReminderApp(
                 onBackPress = appState::navigateBack)
 
         }
-        composable(route="selectedReminders/{latilangi}"){
+        composable(route="selectedReminders/{lati},{longi}"){
             entry -> SelectedReminders(
             navController = appState.navController,
-            latilangi = (entry.arguments?.getString("latilangi")?:""))
+            lati = (entry.arguments?.getString("lati")?:""),
+            longi=(entry.arguments?.getString("longi")?:"")
+        )
                 //onBackPress = appState::navigateBack)
         }
 

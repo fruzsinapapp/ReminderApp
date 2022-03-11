@@ -22,7 +22,8 @@ import java.util.*
 
 @Composable
 fun SelectedReminders(
-    latilangi:String,
+    lati:String,
+    longi:String,
     navController: NavController,
     viewModel: SelectedRemindersViewModel = viewModel()
 ) {
@@ -33,10 +34,11 @@ fun SelectedReminders(
                 .fillMaxSize()
                 .systemBarsPadding()
         ) {
-            Text(text = latilangi)
+            Text(text = lati)
+            Text(text = longi)
         }
     }
-        
+
 /*
     val viewState by viewModel .state.collectAsState()
 

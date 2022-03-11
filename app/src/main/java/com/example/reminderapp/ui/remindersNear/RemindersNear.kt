@@ -70,7 +70,7 @@ val context = LocalContext.current
 
 
                 OutlinedButton(
-                    onClick = { navController.navigate("selectedReminders/${latlng?.latitude.toString()}") }
+                    onClick = { navController.navigate("selectedReminders/${latlng?.latitude.toString()},${latlng?.longitude.toString()}") }
 
 
                 ) {
