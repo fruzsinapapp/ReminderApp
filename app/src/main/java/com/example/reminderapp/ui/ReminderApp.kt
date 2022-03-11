@@ -87,8 +87,8 @@ fun ReminderApp(
         */
         composable(route="selectedReminders"){
             SelectedReminders(
-                navController = appState.navController
-
+                navController = appState.navController,
+                        onBackPress = appState::navigateBack
         )
             //onBackPress = appState::navigateBack)
         }

@@ -50,8 +50,6 @@ import java.util.*
 fun ReminderMessages(
     modifier: Modifier = Modifier,
     navController: NavController,
-
-    //currentTime : Long
 ){
     val viewModel: ReminderMessagesViewModel = viewModel(
         key = "reminder_list",
@@ -61,9 +59,7 @@ fun ReminderMessages(
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-
     Column(modifier = modifier ) {
-
 
             ReminderList(
                 list = viewState.reminders,
@@ -83,8 +79,6 @@ fun ReminderMessages(
     viewModel: ReminderMessagesViewModel,
     navController: NavController
 ) {
-
-
     LazyColumn(
         contentPadding = PaddingValues(0.dp),
         verticalArrangement = Arrangement.Center
@@ -124,18 +118,17 @@ fun ReminderMessages(
                 centerHorizontallyTo(parent)
                 width = Dimension.fillToConstraints
             }
-
         )
 
         //message
         Text(
-            text = reminder.locationX.toString(),
-            maxLines = 1,
+            text = reminder.reminderMessage,
+            maxLines = 2,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderMessage) {
                 linkTo(
                     start = parent.start,
-                    end = icon1.start,
+                    end = icon2.start,
                     startMargin = 24.dp,
                     endMargin = 16.dp,
                     bias = 0f
@@ -145,8 +138,6 @@ fun ReminderMessages(
             }
         )
 
-
-        // time
         Text(
 
             text=getTimeStamp(reminder.reminderTime),
@@ -163,23 +154,6 @@ fun ReminderMessages(
                 top.linkTo(parent.top, 10.dp)
             }
         )
-        /*
-        Text(
-            text=reminder.withNotification.toString(),
-            maxLines = 1,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.constrainAs(reminderNot) {
-                linkTo(
-                    start = reminderTime.end,
-                    end = icon1.start,
-                    startMargin = 8.dp,
-                    endMargin = 16.dp,
-                    bias = 0f
-                )
-                top.linkTo(parent.top, 10.dp)
-            }
-        )
-        */
 
         IconButton(
             onClick = {
@@ -205,12 +179,9 @@ fun ReminderMessages(
         }
         IconButton(
             onClick = {
-
-
                 coroutineScope.launch {
                     viewModel.updateSeen(true, reminder.reminderId)
                 }
-
             },
             modifier = Modifier
                 .size(50.dp)
@@ -221,12 +192,10 @@ fun ReminderMessages(
                     bottom.linkTo(parent.bottom, 10.dp)
                     end.linkTo(icon1.start)
                 }
-
         ) {
             Icon(
                 imageVector = if(reminder.reminderSeen) Icons.Filled.CheckCircle else Icons.Outlined.CheckCircle ,
                 contentDescription = stringResource(R.string.seen)
-
             )
         }
     }
@@ -239,7 +208,7 @@ private fun Long.toDateString(): String {
 
 fun getTimeStamp(timeInMillis: Long): String {
     var date: String? = null
-    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val formatter = SimpleDateFormat("MM.dd. HH:mm")
     date = formatter.format(Date(timeInMillis))
     return date
 }

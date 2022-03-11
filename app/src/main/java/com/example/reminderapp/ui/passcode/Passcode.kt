@@ -49,10 +49,7 @@ fun Passcode(
     sharedPreferences: SharedPreferences
 ) {
     val inputPin = remember { mutableStateListOf<Int>() }
-    //val error = remember { mutableStateOf<String>("") }
-    //val showSuccess = remember { mutableStateOf(false) }
     val context = Graph.appContext
-    //val context = LocalContext.current
 
     Column(
         modifier = Modifier

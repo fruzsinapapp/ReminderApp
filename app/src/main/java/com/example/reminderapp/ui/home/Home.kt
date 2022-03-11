@@ -77,15 +77,12 @@ fun HomeContent(
                 .fillMaxWidth()
         ){
             val appBarColor = MaterialTheme.colors.secondary.copy(alpha = 0.80f)
-            val calendar = Calendar.getInstance()
-            val currentTime = calendar.timeInMillis
 
             HomeAppBar(
                 backgroundColor = appBarColor,
                 navController = navController)
 
             ReminderMessages(
-                //currentTime = currentTime,
                 modifier = Modifier.fillMaxSize(),
                 navController = navController
             )

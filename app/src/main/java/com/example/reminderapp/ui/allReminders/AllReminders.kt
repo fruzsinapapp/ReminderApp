@@ -6,6 +6,7 @@ import androidx.compose.material.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -99,6 +100,7 @@ fun AllRemindersAppBar (   backgroundColor: Color,
 navController: NavController,
                            onBackPress: () -> Unit
 ){
+    /*
     TopAppBar(
         title = {
             Text(
@@ -121,5 +123,18 @@ navController: NavController,
             }
         }
     )
+*/
+
+    TopAppBar {
+        IconButton(
+            onClick = onBackPress
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null
+            )
+        }
+        Text(text = "Back")
+    }
 }
 

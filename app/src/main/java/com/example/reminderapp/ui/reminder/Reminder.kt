@@ -58,23 +58,16 @@ fun Reminder(
 
     val lattilonngi= LatLng(LatiLongi.latitude,LatiLongi.longitude)
 
-
-    //val context = Graph.appContext
-
     val coroutineScope = rememberCoroutineScope()
 
     val message = rememberSaveable { mutableStateOf("") }
     val withOrWithout = remember{ mutableStateOf("")}
     val withOrWithoutLocation = remember{ mutableStateOf("")}
 
-    val xLocation = rememberSaveable { mutableStateOf("") }
-    val yLocation = rememberSaveable { mutableStateOf("") }
-
-
     val latlng = navController
         .currentBackStackEntry
         ?.savedStateHandle
-        ?.getLiveData<LatLng>("location_data") //same key!
+        ?.getLiveData<LatLng>("location_data")
         ?.value
 
     Surface {
@@ -104,8 +97,10 @@ fun Reminder(
                     value = message.value,
                     onValueChange = { message.value = it },
                     label = { Text(text = "Reminder message")},
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+
                 )
+                Spacer(modifier = Modifier.size(20.dp))
                 if (latlng==null){
                     OutlinedButton(
                         //onClick = { navController.navigate("map") }
@@ -121,7 +116,7 @@ fun Reminder(
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                //Radio button
+
                 Text("Would you like to have a notification for you reminder?")
                 Spacer(modifier = Modifier.size(20.dp))
                 Row{
@@ -138,6 +133,7 @@ fun Reminder(
                     )
                     Text("No")
                 }
+                Spacer(modifier = Modifier.size(20.dp))
                 Text("Would you like to have a location for you reminder?")
                 Spacer(modifier = Modifier.size(20.dp))
                 Row{
@@ -187,7 +183,7 @@ fun Reminder(
 
                 Spacer(modifier = Modifier.size(20.dp))
 
-                Button(
+                OutlinedButton(
                     onClick = {
                         datePickerDialog.show()
                     }) {
@@ -213,7 +209,7 @@ fun Reminder(
 
                 Spacer(modifier = Modifier.size(20.dp))
 
-                Button(
+                OutlinedButton(
                     onClick = {
                         timePickerDialog.show()
                     }) {
@@ -221,11 +217,6 @@ fun Reminder(
                 }
 
                 Spacer(modifier = Modifier.size(20.dp))
-
-
-
-
-
 
                 Button(
                     enabled = true,

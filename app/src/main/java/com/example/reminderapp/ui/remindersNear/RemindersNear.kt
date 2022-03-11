@@ -1,6 +1,7 @@
 package com.example.reminderapp.ui.remindersNear
 
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -8,10 +9,13 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.reminderapp.R
 import com.example.reminderapp.ui.home.HomeViewModel
 import com.example.reminderapp.ui.maps.MapsActivity
 import com.example.reminderapp.ui.maps.SelectedSpot
@@ -38,10 +42,18 @@ if(latlng != null){
 
 
     Surface {
+        Image(
+            modifier = Modifier,
+            painter = painterResource(R.drawable.background1),
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .systemBarsPadding()
+                .systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            //verticalArrangement = Arrangement.Center
         ) {
             TopAppBar {
                 IconButton(
@@ -52,7 +64,7 @@ if(latlng != null){
                         contentDescription = null
                     )
                 }
-                Text(text = "First screen")
+                Text(text = "Back")
             }
 
             Column(
@@ -60,34 +72,32 @@ if(latlng != null){
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier.padding(16.dp)
             ) {
+                OutlinedButton(
+                    onClick = { navController.navigate("map") }
+
+                ) {
+                    Text(text = "Select location")
+                }
+                Spacer(modifier = Modifier.size(20.dp))
+
                 if (latlng == null) {
-
-
-                    OutlinedButton(
-                        onClick = { navController.navigate("map") }
-
-                    ) {
-                        Text(text = "Select location")
-                    }
+                    Text(
+                        text = "Latitude of position: not selected yet\nLongitude position: not selected yet"
+                    )
                 } else {
                     Text(
-                        text = "Lat: ${latlng.latitude}, \nLng: ${latlng.longitude}"
+                        text = "Latitude: ${latlng.latitude} \nLongitude: ${latlng.longitude}"
                     )
 
                 }
-
-
-                OutlinedButton(
+                Spacer(modifier = Modifier.size(20.dp))
+                Button(
                     //onClick = { navController.navigate("selectedReminders/${latlng?.latitude.toString()},${latlng?.longitude.toString()}") }
                     onClick = { navController.navigate("selectedReminders") }
-
-
                 ) {
                     Text(text = "Show reminders")
                 }
             }
-
-
         }
     }
 }

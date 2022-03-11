@@ -47,8 +47,13 @@ fun Authentication(
         ){
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            Text(text="How would you like to authenticate yourself?")
+            Text(
+                text = "How would you like to authenticate yourself?",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(16.dp),
+                color = Color.Black
+            )
+            //Text(text="How would you like to authenticate yourself?")
             Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = {

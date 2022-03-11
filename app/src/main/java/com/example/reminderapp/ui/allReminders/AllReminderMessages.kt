@@ -113,13 +113,13 @@ fun ReminderListItem(
 
         //message
         Text(
-            text = reminder.locationX.toString(),
-            maxLines = 1,
+            text = reminder.reminderMessage,
+            maxLines = 2,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderMessage) {
                 linkTo(
                     start = parent.start,
-                    end = icon1.start,
+                    end = icon2.start,
                     startMargin = 24.dp,
                     endMargin = 16.dp,
                     bias = 0f
@@ -139,7 +139,7 @@ fun ReminderListItem(
             modifier = Modifier.constrainAs(reminderTime) {
                 linkTo(
                     start = reminderMessage.end,
-                    end = icon1.start,
+                    end = icon2.start,
                     startMargin = 8.dp,
                     endMargin = 16.dp,
                     bias = 0f
@@ -223,7 +223,7 @@ private fun Long.toDateString(): String {
 
 fun getTimeStamp(timeInMillis: Long): String {
     var date: String? = null
-    val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val formatter = SimpleDateFormat("MM.dd. HH:mm")
     date = formatter.format(Date(timeInMillis))
     return date
 }

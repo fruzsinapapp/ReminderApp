@@ -27,6 +27,7 @@ import java.util.*
 @Composable
 fun SelectedReminders(
     navController: NavController,
+    onBackPress: () -> Unit,
     viewModel: SelectedRemindersViewModel = viewModel()
 
 ) {
@@ -37,7 +38,7 @@ fun SelectedReminders(
                 .fillMaxSize()
                 .systemBarsPadding()
         ) {
-            SelectedMessages(navController = navController)
+            SelectedMessages(navController = navController, onBackPress = onBackPress )
 
         }
     }
@@ -60,6 +61,7 @@ fun SelectedReminders(
 @Composable
 fun SelectedRemindersContent(
     reminders: List<Reminder>,
+    onBackPress: () -> Unit,
     navController: NavController
 
 ){
@@ -78,7 +80,8 @@ fun SelectedRemindersContent(
 
             SelectedMessages(
                 modifier = Modifier.fillMaxSize(),
-                navController = navController
+                navController = navController,
+                onBackPress = onBackPress
             )
         }
 
